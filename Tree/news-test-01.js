@@ -13,8 +13,6 @@ echo(pageid);
 if (pageid == "") {
     echo("pageid is unset therefore Home Page");
     
-    
-    
     seedjsonstatic = '{
 	"code": 200,
 	"title": "ニュース",
@@ -88,8 +86,7 @@ headers = ["Access-Control-Allow-Origin: *","Access-Control-Allow-Methods: GET, 
 // respond with the page's json
 // 選ばれたページを返す
 
-result = import('https://raw.githubusercontent.com/fredsted/webhookscripts/ec22946a83ea85f607fcc6bff83f9d81ed2fe4ed/hello_world.ws')
-echo(result) // value
+
 
 
 //respond(ret_content, 200, headers);
