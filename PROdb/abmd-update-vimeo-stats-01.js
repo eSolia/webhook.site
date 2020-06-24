@@ -8,20 +8,23 @@ entereduser = var('request.header.php-auth-user');
 enteredpass = var('request.header.php-auth-pw');
 url = var('request.url');
 
+// setup authenticate function to be DRY
 function authenticate() {
     respond('', 401, [
         'WWW-Authenticate: Basic realm="Login to eSolia Utility URL"'
     ]);
 }
 
+// authenticate if there is no entered user or pass
 if (!entereduser or !enteredpass) {
     authenticate()
 }
+// authenticate if the entered user or pass fails to match the expected ones kept in variables
 if (entereduser != matchuser and enteredpass != matchpass) {
     authenticate()
 }
 
-// Get reference loads qty
+// Get reference loads qty for comparison after load
 echo("GET reference loads qty");
 prodb_response1 = request(
   prodb55438_reference_loads_url,
@@ -39,6 +42,7 @@ qtybefore = json_path(presp1, '0."Display Name 2"');
 echo(qtybefore);
 
 // Display file upload form and exit if HTTP method is not POST
+// That is, if someone just accesses the utility URL in a standard way, doing a GET
 if (var('request.method') != 'POST') {
     respond('<html lang="ja">
 	<head>
@@ -50,10 +54,7 @@ if (var('request.method') != 'POST') {
             <div class="columns">
                 <div class="column col-10">
                     <h1 class="text-success mt-4">Upload Vimeo Stats CSV</h1>
-    		        <p>This webhook.site URL takes a statistics CSV downloaded from <a href="https://vimeo.com/analytics/video" target="_blank">Vimeo</a>, 
-        		    formats it as expected and pushes it up to the ABMD PROdb database "Training Video" table. 
-        		    The purpose is to update statistics for the Vimeo videos available only via the downloaded CSV. 
-        		    Instructions available <a href="https://pro.dbflex.net/secure/db/15331/preview.aspx?t=140617&id=643" target="_blank">here</a>, but be sure to <strong><mark>select the largest date range possible</mark></strong>.</p>
+    		        <p>This webhook.site URL accepts upload of a statistics CSV downloaded from <a href="https://vimeo.com/analytics/video" target="_blank">Vimeo</a>, formats it as expected and pushes it up to the ABMD PROdb database "Training Video" table. The purpose is to update statistics for the Vimeo videos available only via the downloaded CSV. The frequency of uploads should be either once per month during regular maintenance or, whenever a new video is uploaded to Vimeo. Instructions available <a href="https://pro.dbflex.net/secure/db/15331/preview.aspx?t=140617&id=643" target="_blank">here</a>, but be sure to <strong><mark>select the largest date range possible</mark></strong>.</p>
         		    <br>
         		    <!-- form input control -->
             		<form action="{}" method="POST" enctype="multipart/form-data">
@@ -77,6 +78,8 @@ if (var('request.method') != 'POST') {
 	</body>
 </html>'.format(url,qtybefore));
 }
+// Like a heredoc, chain the html with curly bracket placeholders to format()
+// The order of vars passed to format matters
 
 // Use a comma as delimiter and treat first row (0) as header row
 array = csv_to_array(var('request.file.file.content'), ',', 0)
@@ -94,6 +97,8 @@ dump(array);
 // Make blank array
 array2 = [];
 // Loop over data and prepare array
+// Replace extraneous string in uri field
+// convert mean_percent to number and divide by 100 so it formats correctly in PROdb percent numeric field
 echo("LOOP OVER ARRAY and CHERRYPICK");
 for (subObject in array) {
     array_push(array2, [
@@ -113,8 +118,6 @@ for (subObject in array) {
 //'Stats Manual Updated TS': to_date('now').date_format('YYYY-MM-DDThh:mmZ')
 
 dump(array2);
-
-
 echo("TRANSFORM ARRAY2 TO JSON AND PUSH TO PRODB");
 // echo json to be sent to prodb wmstatus table
 echo(json_encode(array2));
@@ -173,3 +176,5 @@ respond('<html lang="ja">
 	</body>
 </html>
 '.format(qtybefore, qtyafter, url, json_encode(array2)));
+// Like a heredoc, chain the html with curly bracket placeholders to format()
+// The order of vars passed to format matters
