@@ -3,6 +3,5 @@
 // echo(result) 
 
 // Configuration
-
 denphone_token_esolia_01 = var('g_denphone_token_esolia_01');
-echo(denphone_token_esolia_01);
+dump(denphone_token_esolia_01);
