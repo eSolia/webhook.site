@@ -5,6 +5,14 @@
 // Example
 // curl -utoken: "https://cloudapps.denphone.com/cloudapi/cdrcompanycallcharges/v1/view?periodyear=YYYY&periodmonthofyear=MM"
 
+// EXIT script if today not day 01 in month
+echo("Confirming day of month...");
+rightnow = 'now'.to_date();
+daynow = date_format(rightnow, 'DD');
+if (daynow != "01") {
+	echo("Not day 01 in month; exiting");
+	respond("Not day 01 in month; exiting", 500);
+}
 
 // Configuration
 denphone_token_esolia_01_b64 = var('g_denphone_token_esolia_01_b64');
