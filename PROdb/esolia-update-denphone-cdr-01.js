@@ -69,7 +69,7 @@ for (subObject in array) {
       'PhoneNumber': subObject['Cdrcompanycallcharge']['phonenumber'],
       'CallerId': subObject['Cdrcompanycallcharge']['callerid'],
       'CallerIdFull': subObject['Cdrcompanycallcharge']['calleridfull'],
-      'Dest': subObject['Cdrcompanycallcharge']['rateref'], 
+      'Dest': trim(subObject['Cdrcompanycallcharge']['rateref']), 
       'Currency': subObject['Cdrcompanycallcharge']['currency'],
       'Cost': subObject['Cdrcompanycallcharge']['callchargeamount']
     ])
