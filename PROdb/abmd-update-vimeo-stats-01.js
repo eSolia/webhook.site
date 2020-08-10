@@ -1,3 +1,7 @@
+// Call from github 
+// result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/abmd-update-vimeo-stats-01.js')
+// echo(result) 
+
 // Configuration
 prodb55438_token = var('g_prodb55438_token');
 prodb55438_video_upsert_url = var('g_prodb55438_video_upsert_url');
