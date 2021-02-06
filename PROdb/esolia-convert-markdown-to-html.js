@@ -3,7 +3,8 @@
 // echo(result) 
 
 // Prep 
-decd = html_decode(var("request.content"));
+// decd = html_decode(var("request.content"));
+decd = html_strip_tags(var("request.content"));
 echo(decd);
 md = markdown_to_html(decd);
 echo(md);
