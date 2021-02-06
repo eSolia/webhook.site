@@ -3,7 +3,7 @@
 // echo(result) 
 
 // Prep 
-decodedreq = html_decode(var("request.content"));
-echo(decodedreq);
-md = markdown_to_html(decodedreq);
+decd = html_decode(var("request.content"));
+echo(decd);
+md = markdown_to_html(decd);
 echo(md);
