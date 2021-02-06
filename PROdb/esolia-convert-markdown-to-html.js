@@ -4,9 +4,7 @@
 
 // Prep 
 // decd = html_decode(var("request.content"));
-decd = string_replace(var("request.content"), "<br />","\n");
-
-
+decd = string_replace(var("request.content"), "<br/>","\n");
 echo(decd);
 md = markdown_to_html(decd);
 echo(md);
