@@ -4,6 +4,6 @@
 
 // Prep 
 decodedreq = html_decode(var("request.content"));
-echo(decodereq);
-md = markdown_to_html(decodereq);
+echo(decodedreq);
+md = markdown_to_html(decodedreq);
 echo(md);
