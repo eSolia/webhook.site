@@ -1,13 +1,16 @@
 // Call from github 
-// result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/abmd-update-vimeo-stats-01.js')
+// result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/mgj-load-csv-01.js')
 // echo(result) 
 
 // Configuration
-prodb55438_token = var('g_prodb55438_token');
-prodb55438_video_upsert_url = var('g_prodb55438_video_upsert_url');
-prodb55438_reference_loads_url = var('g_prodb55438_reference_loads_url');
-matchuser = var('g_basic_auth_user_01');
-matchpass = var('g_basic_auth_pw_01');
+prodb74559_token = var('g_prodb74559_token');
+prodb74559_hosp_upsert_url = var('g_prodb74559_hosp_upsert_url');
+prodb74559_myracct_upsert_url = var('g_prodb74559_myracct_upsert_url');
+prodb74559_userprops_upsert_url = var('g_prodb74559_userprops_upsert_url');
+prodb74559_myracctuserprops_upsert_url = var('g_prodb74559_myracctuserprops_upsert_url');
+
+matchuser = var('g_basic_auth_user_02');
+matchpass = var('g_basic_auth_pw_02');
 entereduser = var('request.header.php-auth-user');
 enteredpass = var('request.header.php-auth-pw');
 url = var('request.url');
@@ -15,7 +18,7 @@ url = var('request.url');
 // setup authenticate function to be DRY
 function authenticate() {
     respond('', 401, [
-        'WWW-Authenticate: Basic realm="Login to eSolia Utility URL"'
+        'WWW-Authenticate: Basic realm="Login to Myriad Utility URL"'
     ]);
 }
 
@@ -29,21 +32,21 @@ if (entereduser != matchuser and enteredpass != matchpass) {
 }
 
 // Get reference loads qty for comparison after load
-echo("GET reference loads qty");
-prodb_response1 = request(
-  prodb55438_reference_loads_url,
-  '',
-  'GET',
-  ['Content-Type: application/json',
-   'Authorization: bearer ' + prodb55438_token
-  ]
-)
+//echo("GET reference loads qty");
+//prodb_response1 = request(
+//  prodb55438_reference_loads_url,
+//  '',
+//  'GET',
+//  ['Content-Type: application/json',
+//   'Authorization: bearer ' + prodb55438_token
+//  ]
+//)
 
 // Prep qty data
-presp1 = prodb_response1['content'];
-echo(presp1);
-qtybefore = json_path(presp1, '0."Display Name 2"');
-echo(qtybefore);
+//presp1 = prodb_response1['content'];
+//echo(presp1);
+//qtybefore = json_path(presp1, '0."Display Name 2"');
+//echo(qtybefore);
 
 // Display file upload form and exit if HTTP method is not POST
 // That is, if someone just accesses the utility URL in a standard way, doing a GET
