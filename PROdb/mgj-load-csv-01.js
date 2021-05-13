@@ -76,14 +76,14 @@ if (var('request.method') != 'POST') {
             			<button class="btn btn-primary c-hand" type="submit">Upload CSV</button>
             		</form>
             		<br>
-            		<p><strong>Reference Loads Quantity Before CSV Upload</strong>: {}</p>
+            		<p><strong>Reference Loads Quantity Before CSV Upload</strong>: xx</p>
             		<br>
             		<img class="img-responsive rounded" src="https://assets.esolia.com/eSolia_Square_Chicklet_Logo_YellowBlue.svg" alt="eSolia Logo">
                 </div>
             </div>
         </div>
 	</body>
-</html>'.format(url,"XX"));
+</html>'.format(url));
 }
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
@@ -168,8 +168,8 @@ respond('<html lang="ja">
                 <div class="column col-10">
                     <h1 class="text-success mt-4">Stats CSV Upload Successful</h1>
                     <br>
-                    <p><strong>Reference Loads Quantity Before CSV Upload</strong>: {}<br>
-                    <strong>Reference Loads Quantity After CSV Upload</strong>: {}</p>
+                    <p><strong>Reference Loads Quantity Before CSV Upload</strong>: xx<br>
+                    <strong>Reference Loads Quantity After CSV Upload</strong>: xx</p>
                     <p>If the quantity decreased, there is something wrong with your date range selection when exporting the CSV. Please confirm and retry.</p>
                     <p><button class="btn btn-success c-hand"><a href="{}" class="text-warning">Upload Again</a></button></p>
                     <br>
@@ -182,6 +182,6 @@ respond('<html lang="ja">
         </div>
 	</body>
 </html>
-'.format("before", "after", url, json_encode(array2)));
+'.format(url, json_encode(array2)));
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
