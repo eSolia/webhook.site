@@ -117,6 +117,8 @@ if (var('request.method') != 'POST') {
     opacity: 0.5;
   }
   
+
+  
 </style>
 
 <body class="">
@@ -135,7 +137,7 @@ if (var('request.method') != 'POST') {
             <div class="hidden lg:block text-white lg:ml-20">
               <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
                 <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="kc-button-20 rounded-md py-2 px-3 text-sm font-medium m-1">
-                  検査依頼入力
+                  OES
                 </a>
             </div>
           </div>
@@ -148,7 +150,7 @@ if (var('request.method') != 'POST') {
         <div class="px-2 pt-2 pb-3 space-y-1">
           <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
           <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="kc-button-20 block rounded-md py-2 px-3 text-base font-medium">
-            検査依頼入力
+            OES
           </a>
 
 
@@ -161,7 +163,7 @@ if (var('request.method') != 'POST') {
         <h1 class="text-3xl font-bold kc-color-20">
           ミリアド ・ ジェネティクス
         </h1>
-        <p class="kc-color-20">検査依頼入力</p>
+        <p class="kc-color-20">OESアカウントロード入力</p>
       </div>
     </header>
   </div>
@@ -189,23 +191,23 @@ if (var('request.method') != 'POST') {
         <div class="max-w-lg mx-auto lg:max-w-none">
           <form action="{}" method="POST" class="grid grid-cols-1 gap-y-6">
             <div>
-              <label for="full_name" class="sr-only">お名前（フルネーム）</label>
-              <input type="text" name="full_name" id="full_name" autocomplete="name" class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" placeholder="お名前（フルネーム）">
+              <label for="initials" class="sr-only">イニシャル</label>
+              <select name="initials" id="initials" autocomplete="initials" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="イニシャル">
+                <option>YK</option>
+                <option>KC</option>
+                <option>JRC</option>
+              </select>
             </div>
             <div>
-              <label for="email" class="sr-only">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" placeholder="メールアドレス">
+              <label for="job" class="sr-only">ジョブ</label>
+              <textarea id="job" name="job" rows="1" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="ジョブ"></textarea>
+            </div>
+            <div class="text-sm font-semibold px-3 py-2 rounded-md hover:bg-gray-100">
+              <label for="file" class="sr-only">File</label>
+              <input class="rounded" type="file" id="csvfile" name="filename">
             </div>
             <div>
-              <label for="phone" class="sr-only">Phone</label>
-              <input type="text" name="phone" id="phone" autocomplete="tel" class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" placeholder="電話番号">
-            </div>
-            <div>
-              <label for="message" class="sr-only">Message</label>
-              <textarea id="message" name="message" rows="4" class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" placeholder="メッセージ"></textarea>
-            </div>
-            <div>
-              <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md kc-button-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md kc-button-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 送信
               </button>
             </div>
