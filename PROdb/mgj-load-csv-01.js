@@ -189,7 +189,7 @@ if (var('request.method') != 'POST') {
       </div>
       <div class="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
         <div class="max-w-lg mx-auto lg:max-w-none">
-          <form action="{}" method="POST" class="grid grid-cols-1 gap-y-6">
+          <form action="{}" method="POST" class="grid grid-cols-1 gap-y-6 text-gray-500">
             <div>
               <label for="initials" class="sr-only">イニシャル</label>
               <select name="initials" id="initials" autocomplete="initials" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="イニシャル">
@@ -200,7 +200,7 @@ if (var('request.method') != 'POST') {
             </div>
             <div>
               <label for="job" class="sr-only">ジョブ</label>
-              <textarea id="job" name="job" rows="1" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="ジョブ"></textarea>
+              <input type="text" id="job" name="job" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="ジョブ" value="YYYYMMDDHHMM">
             </div>
             <div class="text-sm font-semibold px-3 py-2 rounded-md hover:bg-gray-100">
               <label for="file" class="sr-only">File</label>
