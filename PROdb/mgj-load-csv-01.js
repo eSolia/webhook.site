@@ -182,6 +182,6 @@ respond('<html lang="ja">
         </div>
 	</body>
 </html>
-'.format(qtybefore, qtyafter, url, json_encode(array2)));
+'.format("before", "after", url, json_encode(array2)));
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
