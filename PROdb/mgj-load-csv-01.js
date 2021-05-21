@@ -15,6 +15,10 @@ entereduser = var('request.header.php-auth-user');
 enteredpass = var('request.header.php-auth-pw');
 url = var('request.url');
 
+// get date for job number
+
+jobdate = 'now'.to_date()
+
 // setup authenticate function to be DRY
 function authenticate() {
     respond('', 401, [
@@ -200,7 +204,7 @@ if (var('request.method') != 'POST') {
             </div>
             <div>
               <label for="job" class="sr-only">ジョブ</label>
-              <input type="text" id="job" name="job" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="ジョブ" value="YYYYMMDDHHMM">
+              <input type="text" id="job" name="job" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="ジョブ" value="{}">
             </div>
             <div class="text-sm font-semibold px-3 py-2 rounded-md hover:bg-gray-100">
               <label for="file" class="sr-only">File</label>
@@ -290,7 +294,7 @@ if (var('request.method') != 'POST') {
 </footer>
 </div>
 </body>
-</html>'.format(url));
+</html>'.format(url,jobdate));
 }
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
