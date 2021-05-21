@@ -17,7 +17,7 @@ url = var('request.url');
 
 // get date for job number keeping Japan TZ
 
-jobdate = 'now'.to_date(null, null, 'GMT+9', true)
+jobdate = 'now'.to_date('YYMDHHmm', null, 'GMT+9', true)
 
 // setup authenticate function to be DRY
 function authenticate() {
