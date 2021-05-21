@@ -204,7 +204,7 @@ if (var('request.method') != 'POST') {
             </div>
             <div class="text-sm font-semibold px-3 py-2 rounded-md hover:bg-gray-100">
               <label for="file" class="sr-only">File</label>
-              <input class="rounded" type="file" id="csvfile" name="filename">
+              <input class="rounded" type="file" id="csvfile" name="file">
             </div>
             <div>
               <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md kc-button-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
