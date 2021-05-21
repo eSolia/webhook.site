@@ -15,9 +15,9 @@ entereduser = var('request.header.php-auth-user');
 enteredpass = var('request.header.php-auth-pw');
 url = var('request.url');
 
-// get date for job number
+// get date for job number keeping Japan TZ
 
-jobdate = 'now'.to_date()
+jobdate = 'now'.to_date(null, null, 'GMT+9', true)
 
 // setup authenticate function to be DRY
 function authenticate() {
