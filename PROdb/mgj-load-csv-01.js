@@ -189,7 +189,7 @@ if (var('request.method') != 'POST') {
       </div>
       <div class="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
         <div class="max-w-lg mx-auto lg:max-w-none">
-          <form action="{}" method="POST" class="grid grid-cols-1 gap-y-6 text-gray-500">
+          <form action="{}" method="POST" class="grid grid-cols-1 gap-y-6 text-gray-500" enctype="multipart/form-data">
             <div>
               <label for="initials" class="sr-only">イニシャル</label>
               <select name="initials" id="initials" autocomplete="initials" class="block w-full shadow-sm py-3 px-4 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md" placeholder="イニシャル">
