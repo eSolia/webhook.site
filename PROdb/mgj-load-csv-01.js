@@ -102,7 +102,7 @@ array = csv_to_array(var('request.file.file.content'), ',', 0)
 dump(array);
 
 // If CSV can't be parsed, or there's less than 2 rows, fail
-if (!array or array.length() < 2) {
+if (!array or array.length() < 1) {
     respond('
         <h1>Could not parse CSV</h1>
         <a href="{}">Upload again</a>
