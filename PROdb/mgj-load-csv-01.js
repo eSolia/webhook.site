@@ -99,6 +99,7 @@ if (var('request.method') != 'POST') {
 
 // Use a comma as delimiter and treat first row (0) as header row
 array = csv_to_array(var('request.file.file.content'), ',', 0)
+dump(array);
 
 // If CSV can't be parsed, or there's less than 2 rows, fail
 if (!array or array.length() < 2) {
@@ -108,7 +109,7 @@ if (!array or array.length() < 2) {
     '.format(url));
 }
 
-dump(array);
+
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
