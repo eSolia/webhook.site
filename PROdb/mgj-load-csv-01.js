@@ -110,11 +110,9 @@ if (!array or array.length() < 1) {
 }
 
 
-// Make blank array
+// Make blank array for hospitals
 arrayhosp = [];
 // Loop over data and prepare array
-// Replace extraneous string in uri field
-// convert mean_percent to number and divide by 100 so it formats correctly in PROdb percent numeric field
 echo("Looping over original array from CSV and pulling hospital fields");
 for (subObject in array) {
     array_push(arrayhosp, [
@@ -123,8 +121,22 @@ for (subObject in array) {
         'SRL 担当メール': subObject['SRL 担当メール']
     ])
 }
-
 dump(arrayhosp);
+
+// Make blank array for myriad accounts
+arraymyracct = [];
+// Loop over data and prepare array
+echo("Looping over original array from CSV and pulling myriad account fields");
+for (subObject in array) {
+    array_push(arraymyracct, [
+        'First Name': subObject['First Name'],
+        'Last Name': subObject['Last Name'],
+        'Email Address': subObject['Email Address'],
+        'Myriad Account': subObject['Myriad Account'],
+        'SRL 病院コード': subObject['SRL 病院コード']
+    ])
+}
+dump(arraymyracct);
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
