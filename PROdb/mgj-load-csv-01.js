@@ -110,6 +110,21 @@ if (!array or array.length() < 1) {
 }
 
 
+// Make blank array
+arrayhosp = [];
+// Loop over data and prepare array
+// Replace extraneous string in uri field
+// convert mean_percent to number and divide by 100 so it formats correctly in PROdb percent numeric field
+echo("Looping over original array from CSV and pulling hospital fields");
+for (subObject in array) {
+    array_push(arrayhosp, [
+        'SRL 病院コード': subObject['SRL 病院コード'],
+        'SRL 病院名': subObject['SRL 病院名'],
+        'SRL 担当メール': subObject['SRL 担当メール']
+    ])
+}
+
+dump(arrayhosp);
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
