@@ -17,7 +17,7 @@ url = var('request.url');
 
 // get date for job number keeping Japan TZ
 
-jobdate = 'now'.to_date('YYMDHHmm', null, 'GMT+9', true)
+jobdate = 'now'.to_date('YY-M-D-HHmm', null, 'GMT+9', true)
 
 // setup authenticate function to be DRY
 function authenticate() {
@@ -200,6 +200,8 @@ if (var('request.method') != 'POST') {
                 <option>YK</option>
                 <option>KC</option>
                 <option>JRC</option>
+                <option>Myriad</option>
+                <option>eSolia</option>
               </select>
             </div>
             <div>
