@@ -94,7 +94,7 @@ if (var('request.method') != 'POST') {
 </html>'.format(url,jobdate));
 }
 // Like a heredoc, chain the html with curly bracket placeholders to format()
-// The order of vars passed to format matters
+// The order of vars passed to format matters 
 
 
 // Use a comma as delimiter and treat first row (0) as header row
