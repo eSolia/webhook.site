@@ -14,6 +14,7 @@ matchpass = var('g_basic_auth_pw_02');
 entereduser = var('request.header.php-auth-user');
 enteredpass = var('request.header.php-auth-pw');
 url = var('request.url');
+echo(url);
 
 // get date for job number keeping Japan TZ
 
