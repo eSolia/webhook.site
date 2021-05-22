@@ -315,3 +315,30 @@ if (!array or array.length() < 2) {
 
 dump(array);
 
+// Display the parsed CSV in JSON format 
+respond('<html lang="ja">
+  <head>
+    <title>Response</title>
+        <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    </head>
+  <body class="text-dark p-2">
+      <div class="container grid-lg">
+            <div class="columns">
+                <div class="column col-10">
+                    <h1 class="text-success mt-4">Upload Successful</h1>
+                    <br>
+                    <p>asdf asdf</p>
+                    <p><button class="btn btn-success c-hand"><a href="{}" class="text-warning">Upload Again</a></button></p>
+                    <br>
+                <img class="img-responsive rounded" src="https://assets.esolia.com/eSolia_Square_Chicklet_Logo_YellowBlue.svg" alt="eSolia Logo">
+                    <br>
+                    <h2>Uploaded Data in JSON Format</h2>
+                    <pre>{}</pre>
+                </div>
+            </div>
+        </div>
+  </body>
+</html>
+'.format(url, json_encode(array)));
+// Like a heredoc, chain the html with curly bracket placeholders to format()
+// The order of vars passed to format matters
