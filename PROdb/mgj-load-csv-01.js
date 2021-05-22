@@ -132,7 +132,7 @@ for (subObject in array) {
         'First Name': subObject['First Name'],
         'Last Name': subObject['Last Name'],
         'Email Address': subObject['Email Address'],
-        'Myriad Account': subObject['Myriad Account'],
+        'ミリアド ID': subObject['Myriad Account'],
         'SRL 病院コード': subObject['SRL 病院コード']
     ])
 }
