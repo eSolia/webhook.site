@@ -91,7 +91,7 @@ if (var('request.method') != 'POST') {
           </div>
       </div>
 </body>
-</html>'.format(url,jobname));
+</html>'.format(url,jobdate));
 }
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
