@@ -123,7 +123,7 @@ for (subObject in array) {
 }
 dump(arrayhosp);
 
-// Make blank array for myriad accounts
+// Make blank array for myriad account
 arraymyracct = [];
 // Loop over data and prepare array
 echo("Looping over original array from CSV and pulling myriad account fields");
