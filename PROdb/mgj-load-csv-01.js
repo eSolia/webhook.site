@@ -77,7 +77,7 @@ if (var('request.method') != 'POST') {
                           <div class="col-7">
                             <label class="form-label" for="input-example-16">Select File</label>
                           </div>
-                          <div class="col-7">
+                          <div class="col-2">
                             <input class="form-input" id="inputfile" type="file" name="file" />
                           </div>
                       </div>
