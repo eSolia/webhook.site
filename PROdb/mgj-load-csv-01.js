@@ -122,6 +122,7 @@ for (subObject in array) {
     ])
 }
 dump(arrayhosp);
+echo(json_encode(arrayhosp));
 
 // Make blank array for myriad account
 arraymyracct = [];
@@ -137,6 +138,7 @@ for (subObject in array) {
     ])
 }
 dump(arraymyracct);
+echo(json_encode(arraymyracct));
 
 // Make blank array for myriad account
 arraynewextuser = [];
@@ -152,6 +154,7 @@ for (subObject in array) {
     ])
 }
 dump(arraynewextuser);
+echo(json_encode(arraynewextuser));
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
