@@ -92,7 +92,7 @@ if (var('request.method') != 'POST') {
                     <label class="form-label" for="jobdate">Job Date</label>
                   </div>
                   <div class="col-9 col-sm-12">
-                    <input class="form-input" type="text" id="jobdate" placeholder="Job Date" value="{}" />
+                    <input class="form-input" type="text" name="jobdate" id="jobdate" placeholder="Job Date" value="{}" />
                   </div>
                 </div>
                 <div class="form-group">
