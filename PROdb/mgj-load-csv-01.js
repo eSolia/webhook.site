@@ -74,7 +74,7 @@ if (var('request.method') != 'POST') {
               <!-- form input control -->
               <form action="{}" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                          <div class="col-2">
+                          <div class="col-7">
                             <label class="form-label" for="input-example-16">Select File</label>
                           </div>
                           <div class="col-7">
@@ -97,7 +97,7 @@ if (var('request.method') != 'POST') {
 // The order of vars passed to format matters 
 
 // See the request
-dump(var('request'));
+echo(var('request.form.'));
 
 // Use a comma as delimiter and treat first row (0) as header row
 array = csv_to_array(var('request.file.file.content'), ',', 0)
