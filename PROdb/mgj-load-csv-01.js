@@ -118,9 +118,12 @@ if (var('request.method') != 'POST') {
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
 
-// See the request
+// See and capture the form request
 echo(var('request.form.jobdate'));
 echo(var('request.form.initials'));
+forminit = var('request.form.initials');
+formjd = var('request.form.jobdate');
+jobstring = forminit + "-" + formjd;
 
 // Use a comma as delimiter and treat first row (0) as header row
 array = csv_to_array(var('request.file.file.content'), ',', 0)
@@ -175,7 +178,8 @@ for (subObject in array) {
         'Last Name': subObject['Last Name'],
         'Email': subObject['Email Address'],
         'Myriad Account': subObject['Myriad Account'],
-        'Source': 'CSV'
+        'Source': 'CSV',
+        'Job': jobstring
     ])
 }
 dump(arraynewextuser);
