@@ -72,21 +72,42 @@ if (var('request.method') != 'POST') {
               <p>This webhook.site URL accepts upload of a CSV formatted in <i>this way</i>, formats it, and pushes it up to the MGJ PROdb database. The purpose is ... Instructions available <a href="#" target="_blank">here</a>...</p>
               <br>
               <!-- form input control -->
-              <form action="{}" method="POST" enctype="multipart/form-data">
+              <form action="{}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                 <div class="form-group">
-                          <div class="col-7">
-                            <label class="form-label" for="input-example-16">Select File</label>
-                          </div>
-                          <div class="col-2">
-                            <input class="form-input" id="inputfile" type="file" name="file" />
-                          </div>
-                      </div>
+                  <div class="col-3 col-sm-12">
+                    <label class="form-label" for="csv-load">Select Initials</label>
+                  </div>
+                  <div class="col-9 col-sm-12">
+                    <input class="form-input" id="inputfile" type="file" name="file" />
+                    <select name="initials" id="initials" autocomplete="initials" class="form-select" placeholder="イニシャル">
+                      <option>YK</option>
+                      <option>KC</option>
+                      <option>JRC</option>
+                      <option>Myriad</option>
+                      <option>eSolia</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-3 col-sm-12">
+                    <label class="form-label" for="jobdate">Job Date</label>
+                  </div>
+                  <div class="col-9 col-sm-12">
+                    <input class="form-input" type="text" id="jobdate" placeholder="Job Date" value="{}">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-3 col-sm-12">
+                    <label class="form-label" for="csv-load">Select CSV</label>
+                  </div>
+                  <div class="col-9 col-sm-12">
+                    <input class="form-input" id="inputfile" type="file" name="file" />
+                  </div>
+                </div>
                 <button class="btn btn-primary c-hand" type="submit">Upload CSV</button>
               </form>
               <br>
-              <p>job: {}</p>
-              <br>
-              <img class="img-responsive rounded" src="https://assets.esolia.com/eSolia_Square_Chicklet_Logo_YellowBlue.svg" alt="eSolia Logo">
+              <img class="img-responsive rounded" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo">
               </div>
           </div>
       </div>
