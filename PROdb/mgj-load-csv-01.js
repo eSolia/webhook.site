@@ -141,7 +141,7 @@ dump(arraymyracct);
 // Make blank array for myriad account
 arraynewextuser = [];
 // Loop over data and prepare array
-echo("Looping over original array from CSV and pulling myriad account fields");
+echo("Looping over original array from CSV and pulling fields for new external user");
 for (subObject in array) {
     array_push(arraynewextuser, [
         'First Name': subObject['First Name'],
