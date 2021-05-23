@@ -78,7 +78,6 @@ if (var('request.method') != 'POST') {
                     <label class="form-label" for="csv-load">Select Initials</label>
                   </div>
                   <div class="col-9 col-sm-12">
-                    <input class="form-input" id="inputfile" type="file" name="file" />
                     <select name="initials" id="initials" autocomplete="initials" class="form-select" placeholder="イニシャル">
                       <option>YK</option>
                       <option>KC</option>
@@ -104,8 +103,10 @@ if (var('request.method') != 'POST') {
                     <input class="form-input" id="inputfile" type="file" name="file" />
                   </div>
                 </div>
+
                 <button class="btn btn-primary c-hand" type="submit">Upload CSV</button>
               </form>
+              
               <br>
               <img class="img-responsive rounded" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo">
               </div>
