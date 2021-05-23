@@ -96,6 +96,8 @@ if (var('request.method') != 'POST') {
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters 
 
+// See the request
+echo(var('request'));
 
 // Use a comma as delimiter and treat first row (0) as header row
 array = csv_to_array(var('request.file.file.content'), ',', 0)
