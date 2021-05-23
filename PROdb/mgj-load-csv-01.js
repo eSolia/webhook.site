@@ -105,7 +105,7 @@ dump(array);
 if (!array or array.length() < 1) {
     respond('
         <h1>Could not parse CSV</h1>
-        <a href="{}">Upload again</a>
+        <a href="{}">Upload Again</a>
     '.format(url));
 }
 
@@ -137,6 +137,21 @@ for (subObject in array) {
     ])
 }
 dump(arraymyracct);
+
+// Make blank array for myriad account
+arraynewextuser = [];
+// Loop over data and prepare array
+echo("Looping over original array from CSV and pulling myriad account fields");
+for (subObject in array) {
+    array_push(arraynewextuser, [
+        'First Name': subObject['First Name'],
+        'Last Name': subObject['Last Name'],
+        'Email': subObject['Email Address'],
+        'Myriad Account': subObject['Myriad Account'],
+        'Source': 'CSV'
+    ])
+}
+dump(arraynewextuser);
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
