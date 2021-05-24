@@ -149,7 +149,9 @@ for (subObject in array) {
     array_push(arrayhosp, [
         'SRL 病院コード': subObject['SRL 病院コード'],
         'SRL 病院名': subObject['SRL 病院名'],
-        'SRL 担当メール': subObject['SRL 担当メール']
+        'SRL 担当メール': subObject['SRL 担当メール'],
+        'Source': 'CSV',
+        'Job': jobstring
     ])
 }
 dump(arrayhosp);
@@ -165,7 +167,9 @@ for (subObject in array) {
         'Last Name': subObject['Last Name'],
         'Email Address': subObject['Email Address'],
         'ミリアド ID': subObject['Myriad Account'],
-        'SRL 病院コード': subObject['SRL 病院コード']
+        'SRL 病院コード': subObject['SRL 病院コード'],
+        'Source': 'CSV',
+        'Job': jobstring
     ])
 }
 dump(arraymyracct);
