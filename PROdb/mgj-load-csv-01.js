@@ -192,6 +192,15 @@ for (subObject in array) {
 dump(arraymyracct);
 arraymyracct_json = json_encode(arraymyracct);
 echo(arraymyracct_json);
+// upsert to OES
+oes_myracctupsert_response = request(
+  prodb74559_myracct_upsert_url,
+  arraymyracct_json,
+  'POST',
+  ['Content-Type: application/json',
+   'Authorization: bearer '+ prodb74559_token
+  ]
+)
 
 // Make blank array for myriad account
 arraynewextuser = [];
