@@ -8,6 +8,7 @@ prodb74559_hosp_upsert_url = var('g_prodb74559_hosp_upsert_url');
 prodb74559_myracct_upsert_url = var('g_prodb74559_myracct_upsert_url');
 prodb74559_userprops_upsert_url = var('g_prodb74559_userprops_upsert_url');
 prodb74559_myracctuserprops_upsert_url = var('g_prodb74559_myracctuserprops_upsert_url');
+prodb74559_newextuser_upsert_url = var('g_prodb74559_newextuser_upsert_url');
 
 matchuser = var('g_basic_auth_user_02');
 matchpass = var('g_basic_auth_pw_02');
@@ -184,7 +185,7 @@ for (subObject in array) {
         'Last Name': subObject['Last Name'],
         'Email Address': subObject['Email Address'],
         'ミリアド ID': to_string(subObject['Myriad Account']),
-        'SRL 病院コード': to_string(subObject['SRL 病院コード']),
+        'SRL病院コード': to_string(subObject['SRL 病院コード']),
         'Source': 'CSV',
         'Job': jobstring
     ])
@@ -219,6 +220,15 @@ for (subObject in array) {
 dump(arraynewextuser);
 arraynewextuser_json = json_encode(arraynewextuser);
 echo(arraynewextuser_json);
+// upsert to oes
+oes_newextuserupsert_response = request(
+  prodb74559_newextuser_upsert_url,
+  arraynewextuser_json,
+  'POST',
+  ['Content-Type: application/json',
+   'Authorization: bearer '+ prodb74559_token
+  ]
+)
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
