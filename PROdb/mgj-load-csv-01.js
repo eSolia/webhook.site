@@ -163,6 +163,16 @@ for (subObject in array) {
 dump(arrayhosp);
 arrayhosp_json = json_encode(arrayhosp);
 echo(arrayhosp_json);
+// upsert to OES
+oes_hospupsert_response = request(
+  prodb74559_hosp_upsert_url,
+  arrayhosp_json,
+  'POST',
+  ['Content-Type: application/json',
+   'Authorization: bearer '+ prodb74559_token
+  ]
+)
+
 
 // Make blank array for myriad account
 arraymyracct = [];
