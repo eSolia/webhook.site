@@ -100,15 +100,18 @@ if (var('request.method') != 'POST') {
                     <label class="form-label" for="csv-load">Select CSV</label>
                   </div>
                   <div class="col-9 col-sm-12">
-                    <input class="form-input" id="inputfile" type="file" name="file" />
+                    <div class="input-group">
+                      <input class="form-input input-group-addon" id="inputfile" type="file" name="file" />
+                      <button class="btn btn-success input-group-btn c-hand btn-lg" type="submit">Upload CSV</button>
+                    </div>
                   </div>
                 </div>
 
-                <button class="btn btn-primary c-hand" type="submit">Upload CSV</button>
+                
               </form>
               
               <br>
-              <img class="img-responsive rounded" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo">
+              <img class="img-responsive rounded" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="200px">
               </div>
           </div>
       </div>
