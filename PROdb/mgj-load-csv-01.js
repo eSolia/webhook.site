@@ -61,14 +61,22 @@ if (entereduser != matchuser and enteredpass != matchpass) {
 if (var('request.method') != 'POST') {
   respond('<html lang="ja">
 <head>
-  <title>Upload OES CSV</title>
-      <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-  </head>
+  <title>MGJ OESのCSVアップロード</title>
+　<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+</head>
 <body class="text-dark p-2">
     <div class="container grid-lg">
           <div class="columns">
               <div class="column col-10">
-                  <h1 class="text-success mt-4">Upload OES CSV</h1>
+                <header class="navbar bg-gray p-2 my-2">
+                  <section class="navbar-section">
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="navbar-brand mr-2"><img class="img-responsive" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="100px"></a>
+                  </section>
+                  <section class="navbar-section">
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">OES</a>
+                  </section>
+                </header>
+                <h1 class="text-success mt-4">MGJ OESのCSVアップロード</h1>
               <p>This webhook.site URL accepts upload of a CSV formatted in <i>this way</i>, formats it, and pushes it up to the MGJ PROdb database. The purpose is ... Instructions available <a href="#" target="_blank">here</a>...</p>
               <br>
               <!-- form input control -->
@@ -110,8 +118,6 @@ if (var('request.method') != 'POST') {
                 
               </form>
               
-              <br>
-              <img class="img-responsive rounded" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="200px">
               </div>
           </div>
       </div>
@@ -198,27 +204,38 @@ echo(arraynewextuser_json);
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
   <head>
-    <title>Response</title>
-        <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-    </head>
+    <title>MGJ OESのCSVアップロード結果</title>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+　</head>
   <body class="text-dark p-2">
       <div class="container grid-lg">
             <div class="columns">
                 <div class="column col-10">
-                    <h1 class="text-success mt-4">Upload Successful</h1>
-                    <br>
-                    <p>asdf asdf</p>
-                    <p><button class="btn btn-success c-hand"><a href="{}" class="text-warning">Upload Again</a></button></p>
-                    <br>
-                <img class="img-responsive rounded" src="https://assets.esolia.com/eSolia_Square_Chicklet_Logo_YellowBlue.svg" alt="eSolia Logo">
-                    <br>
-                    <h2>Uploaded Data in JSON Format</h2>
-                    <pre>{}</pre>
+                <header class="navbar bg-gray p-2 my-2">
+                  <section class="navbar-section">
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="navbar-brand mr-2"><img class="img-responsive" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="100px"></a>
+                  </section>
+                  <section class="navbar-section">
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">OES</a>
+                  </section>
+                </header>
+                　<h1 class="text-success mt-4">MGJ OESのCSVアップロード結果</h1>
+                　<p>ジョブ「{}」のアップロードしたデータは下記の通り。</p>
+                　<br>
+                    <p><button class="btn btn-success c-hand"><a href="{}" class="text-light">次のCSVアップロード</a></button></p>
+                    <div class="divider text-center" data-content="RESULTS"></div>
+                    <h2 class="text-gray">JSON形式のアップロードデータ</h2>
+                    <h3 class="text-dark">病院</h3>
+                    <pre class="code" data-lang="JSON"><code>{}</code></pre>
+                    <h3 class="text-dark">ミリアドアカウント</h3>
+                    <pre class="code" data-lang="JSON"><code>{}</code></pre>
+                    <h3 class="text-dark">新規外部ユーザー</h3>
+                    <pre class="code" data-lang="JSON"><code>{}</code></pre>
                 </div>
             </div>
         </div>
   </body>
 </html>
-'.format(url, json_encode(array)));
+'.format(jobstring,url,arrayhosp_json,arraymyracct_json,arraynewextuser_json));
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
