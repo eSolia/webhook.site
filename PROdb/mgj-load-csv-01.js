@@ -147,7 +147,7 @@ arrayhosp = [];
 echo("Looping over original array from CSV and pulling hospital fields");
 for (subObject in array) {
     array_push(arrayhosp, [
-        'SRL 病院コード': subObject['SRL 病院コード'],
+        'SRL 病院コード': to_string(subObject['SRL 病院コード']),
         'SRL 病院名': subObject['SRL 病院名'],
         'SRL 担当メール': subObject['SRL 担当メール'],
         'Source': 'CSV',
@@ -166,8 +166,8 @@ for (subObject in array) {
         'First Name': subObject['First Name'],
         'Last Name': subObject['Last Name'],
         'Email Address': subObject['Email Address'],
-        'ミリアド ID': subObject['Myriad Account'],
-        'SRL 病院コード': subObject['SRL 病院コード'],
+        'ミリアド ID': to_string(subObject['Myriad Account']),
+        'SRL 病院コード': to_string(subObject['SRL 病院コード']),
         'Source': 'CSV',
         'Job': jobstring
     ])
@@ -184,7 +184,7 @@ for (subObject in array) {
         'First Name': subObject['First Name'],
         'Last Name': subObject['Last Name'],
         'Email': subObject['Email Address'],
-        'Myriad Account': subObject['Myriad Account'],
+        'Myriad Account': to_string(subObject['Myriad Account']),
         'Source': 'CSV',
         'Job': jobstring
     ])
