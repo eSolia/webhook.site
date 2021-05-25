@@ -137,7 +137,11 @@ jobstring = forminit + "-" + formjd;
 
 // Use a comma as delimiter and treat first row (0) as header row
 csv_content = var('request.file.file.content')
-array = csv_to_array(csv_content, ',', 0)
+
+echo("replace 0 with ZZEERROO in csv");
+csv_nozero = string_replace(csv_content,"0","ZZEERROO");
+
+array = csv_to_array(csv_nozero, ',', 0)
 dump(array);
 
 // If CSV can't be parsed, or there's less than 2 rows, fail
@@ -155,13 +159,16 @@ arrayhosp = [];
 echo("Looping over original array from CSV and pulling hospital fields");
 for (subObject in array) {
     array_push(arrayhosp, [
-        'SRL 病院コード': to_string(subObject['SRL 病院コード']),
-        'SRL 病院名': subObject['SRL 病院名'],
-        'SRL 担当メール': subObject['SRL 担当メール'],
+        'SRL 病院コード': to_string(string_replace(subObject['SRL 病院コード'],"ZZEERROO","0")),
+        'SRL 病院名': string_replace(subObject['SRL 病院名'],"ZZEERROO","0"),
+        'SRL 担当メール': string_replace(subObject['SRL 担当メール'],"ZZEERROO","0"),
         'Source': 'CSV',
         'Job': jobstring
     ])
 }
+
+//string_replace(astring,"ZZEERROO","0")
+
 dump(arrayhosp);
 arrayhosp_json = json_encode(arrayhosp);
 echo(arrayhosp_json);
@@ -182,11 +189,11 @@ arraymyracct = [];
 echo("Looping over original array from CSV and pulling myriad account fields");
 for (subObject in array) {
     array_push(arraymyracct, [
-        'First Name': subObject['First Name'],
-        'Last Name': subObject['Last Name'],
-        'Email Address': subObject['Email Address'],
-        'ミリアド ID': to_string(subObject['Myriad Account']),
-        'SRL病院コード': to_string(subObject['SRL 病院コード']),
+        'First Name': string_replace(subObject['First Name'],"ZZEERROO","0"),
+        'Last Name': string_replace(subObject['Last Name'],"ZZEERROO","0"),
+        'Email Address': string_replace(subObject['Email Address'],"ZZEERROO","0"),
+        'ミリアド ID': to_string(string_replace(subObject['Myriad Account'],"ZZEERROO","0")),
+        'SRL病院コード': to_string(string_replace(subObject['SRL 病院コード'],"ZZEERROO","0")),
         'Source': 'CSV',
         'Job': jobstring
     ])
@@ -210,10 +217,10 @@ arraynewextuser = [];
 echo("Looping over original array from CSV and pulling fields for new external user");
 for (subObject in array) {
     array_push(arraynewextuser, [
-        'First Name': subObject['First Name'],
-        'Last Name': subObject['Last Name'],
-        'Email': subObject['Email Address'],
-        'Myriad Account': to_string(subObject['Myriad Account']),
+        'First Name': string_replace(subObject['First Name'],"ZZEERROO","0"),
+        'Last Name': string_replace(subObject['Last Name'],"ZZEERROO","0"),
+        'Email': string_replace(subObject['Email Address'],"ZZEERROO","0"),
+        'Myriad Account': to_string(string_replace(subObject['Myriad Account'],"ZZEERROO","0")),
         'Source': 'CSV',
         'Job': jobstring
     ])
