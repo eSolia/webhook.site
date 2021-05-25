@@ -63,7 +63,7 @@ if (var('request.method') != 'POST') {
   respond('<html lang="ja">
 <head>
   <title>MGJ OESのCSVアップロード</title>
-　<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+ <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
 </head>
 <body class="text-dark p-2">
     <div class="container grid-lg">
@@ -243,7 +243,7 @@ respond('<html lang="ja">
   <head>
     <title>MGJ OESのCSVアップロード結果</title>
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-　</head>
+ </head>
   <body class="text-dark p-2">
       <div class="container grid-lg">
             <div class="columns">
@@ -256,9 +256,9 @@ respond('<html lang="ja">
                     <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">OES</a>
                   </section>
                 </header>
-                　<h1 class="text-success mt-4">MGJ OESのCSVアップロード結果</h1>
-                　<p>ジョブ「{}」のアップロードしたデータは下記の通り。</p>
-                　<br>
+                 <h1 class="text-success mt-4">MGJ OESのCSVアップロード結果</h1>
+                 <p>ジョブ「{}」のアップロードしたデータは下記の通り。</p>
+                 <br>
                     <p><button class="btn btn-success c-hand"><a href="{}" class="text-light">次のCSVアップロード</a></button></p>
                     <div class="divider text-center" data-content="RESULTS"></div>
                     <h2 class="text-gray">JSON形式のアップロードデータ</h2>
