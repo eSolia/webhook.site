@@ -136,7 +136,8 @@ formjd = var('request.form.jobdate');
 jobstring = forminit + "-" + formjd;
 
 // Use a comma as delimiter and treat first row (0) as header row
-array = csv_to_array(var('request.file.file.content'), ',', 0)
+csv_content = var('request.file.file.content')
+array = csv_to_array(csv_content, ',', 0)
 dump(array);
 
 // If CSV can't be parsed, or there's less than 2 rows, fail
