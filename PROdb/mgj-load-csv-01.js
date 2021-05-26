@@ -74,10 +74,10 @@ if (var('request.method') != 'POST') {
                     <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="navbar-brand mr-2"><img class="img-responsive" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="100px"></a>
                   </section>
                   <section class="navbar-section">
-                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">OES</a>
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">M-SODAS</a>
                   </section>
                 </header>
-                <h1 class="text-success mt-4">MGJ OESのCSVアップロード</h1>
+                <h1 class="text-success mt-4">M-SODASのCSVアップロード</h1>
               <p>This webhook.site URL accepts upload of a CSV formatted in <i>this way</i>, formats it, and pushes it up to the MGJ PROdb database. The purpose is ... Instructions available <a href="#" target="_blank">here</a>...</p>
               <br>
               <!-- form input control -->
@@ -111,7 +111,7 @@ if (var('request.method') != 'POST') {
                   <div class="col-9 col-sm-12">
                     <div class="input-group">
                       <input class="form-input input-group-addon" id="inputfile" type="file" name="file" />
-                      <button class="btn btn-success input-group-btn c-hand btn-lg" type="submit">Upload CSV</button>
+                      <button class="btn btn-success input-group-btn c-hand btn-lg" type="submit" id="submit">Upload CSV</button>
                     </div>
                   </div>
                 </div>
@@ -159,7 +159,7 @@ arrayhosp = [];
 echo("Looping over original array from CSV and pulling hospital fields");
 for (subObject in array) {
     array_push(arrayhosp, [
-        'SRL 病院コード': to_string(string_replace(subObject['SRL 病院コード'],"ZZEERROO","0")),
+        'SRL 病院コード': string_replace(to_string(subObject['SRL 病院コード']),"ZZEERROO","0"),
         'SRL 病院名': string_replace(subObject['SRL 病院名'],"ZZEERROO","0"),
         'SRL 担当メール': string_replace(subObject['SRL 担当メール'],"ZZEERROO","0"),
         'Source': 'CSV',
@@ -192,12 +192,14 @@ for (subObject in array) {
         'First Name': string_replace(subObject['First Name'],"ZZEERROO","0"),
         'Last Name': string_replace(subObject['Last Name'],"ZZEERROO","0"),
         'Email Address': string_replace(subObject['Email Address'],"ZZEERROO","0"),
-        'ミリアド ID': to_string(string_replace(subObject['Myriad Account'],"ZZEERROO","0")),
-        'SRL病院コード': to_string(string_replace(subObject['SRL 病院コード'],"ZZEERROO","0")),
+        'ミリアド ID': string_replace(to_string(subObject['Myriad Account']),"ZZEERROO","0"),
+        'SRL病院コード': string_replace(to_string(subObject['SRL 病院コード']),"ZZEERROO","0"),
         'Source': 'CSV',
         'Job': jobstring
     ])
 }
+//'ミリアド ID': to_string(string_replace(subObject['Myriad Account'],"ZZEERROO","0")),
+//'SRL病院コード': to_string(string_replace(subObject['SRL 病院コード'],"ZZEERROO","0")),
 dump(arraymyracct);
 arraymyracct_json = json_encode(arraymyracct);
 echo(arraymyracct_json);
@@ -220,7 +222,7 @@ for (subObject in array) {
         'First Name': string_replace(subObject['First Name'],"ZZEERROO","0"),
         'Last Name': string_replace(subObject['Last Name'],"ZZEERROO","0"),
         'Email': string_replace(subObject['Email Address'],"ZZEERROO","0"),
-        'Myriad Account': to_string(string_replace(subObject['Myriad Account'],"ZZEERROO","0")),
+        'Myriad Account': string_replace(to_string(subObject['Myriad Account']),"ZZEERROO","0"),
         'Source': 'CSV',
         'Job': jobstring
     ])
@@ -253,10 +255,10 @@ respond('<html lang="ja">
                     <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="navbar-brand mr-2"><img class="img-responsive" src="https://assets.esolia.com/mgj/myriad-logo.png" alt="Myriad Logo" width="100px"></a>
                   </section>
                   <section class="navbar-section">
-                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">OES</a>
+                    <a href="https://db.myriadgenetics-ops.com/secure/db/74559/overview.aspx?t=724298" class="btn btn-link">M-SODAS</a>
                   </section>
                 </header>
-                 <h1 class="text-success mt-4">MGJ OESのCSVアップロード結果</h1>
+                 <h1 class="text-success mt-4">M-SODASのCSVアップロード結果</h1>
                  <p>ジョブ「{}」のアップロードしたデータは下記の通り。</p>
                  <br>
                     <p><button class="btn btn-success c-hand"><a href="{}" class="text-light">次のCSVアップロード</a></button></p>
