@@ -78,13 +78,13 @@ if (var('request.method') != 'POST') {
                   </section>
                 </header>
                 <h1 class="text-success mt-4">M-SODASのCSVアップロード</h1>
-              <p>This webhook.site URL accepts upload of a CSV formatted in <i>this way</i>, formats it, and pushes it up to the MGJ PROdb database. The purpose is ... Instructions available <a href="#" target="_blank">here</a>...</p>
+              <p>この webhook.site URLは、新規ユーザーデータの入った、決まった形式のCSVを受け付けて、様々な変換してからM-SODAS PROdbにアップしてくれます。</p>
               <br>
               <!-- form input control -->
               <form onSubmit="document.getElementById(\'submit\').disabled=true;" action="{}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                 <div class="form-group">
                   <div class="col-3 col-sm-12">
-                    <label class="form-label" for="csv-load">Select Initials</label>
+                    <label class="form-label" for="csv-load">イニシャル選択</label>
                   </div>
                   <div class="col-9 col-sm-12">
                     <select name="initials" id="initials" autocomplete="initials" class="form-select" placeholder="イニシャル">
@@ -98,7 +98,7 @@ if (var('request.method') != 'POST') {
                 </div>
                 <div class="form-group">
                   <div class="col-3 col-sm-12">
-                    <label class="form-label" for="jobdate">Job Date</label>
+                    <label class="form-label" for="jobdate">ジョブ日時</label>
                   </div>
                   <div class="col-9 col-sm-12">
                     <input class="form-input" type="text" name="jobdate" id="jobdate" placeholder="Job Date" value="{}" />
@@ -106,12 +106,12 @@ if (var('request.method') != 'POST') {
                 </div>
                 <div class="form-group">
                   <div class="col-3 col-sm-12">
-                    <label class="form-label" for="csv-load">Select CSV</label>
+                    <label class="form-label" for="csv-load">CSV選択</label>
                   </div>
                   <div class="col-9 col-sm-12">
                     <div class="input-group">
                       <input class="form-input input-group-addon" id="inputfile" type="file" name="file" />
-                      <button class="btn btn-success input-group-btn c-hand btn-lg" type="submit" id="submit">Upload CSV</button>
+                      <button class="btn btn-success input-group-btn c-hand btn-lg" type="submit" id="submit">CSV送信</button>
                     </div>
                   </div>
                 </div>
