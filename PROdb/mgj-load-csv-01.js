@@ -81,7 +81,7 @@ if (var('request.method') != 'POST') {
               <p>This webhook.site URL accepts upload of a CSV formatted in <i>this way</i>, formats it, and pushes it up to the MGJ PROdb database. The purpose is ... Instructions available <a href="#" target="_blank">here</a>...</p>
               <br>
               <!-- form input control -->
-              <form action="{}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+              <form onSubmit="document.getElementById(\'submit\').disabled=true;" action="{}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                 <div class="form-group">
                   <div class="col-3 col-sm-12">
                     <label class="form-label" for="csv-load">Select Initials</label>
