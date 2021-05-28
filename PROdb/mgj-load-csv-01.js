@@ -4,7 +4,7 @@
 
 // Configuration
 prodb74559_token = var('g_prodb74559_token');
-prodb74559_hosp_upsert_url = var('g_prodb74559_hosp_upsert_url');
+// prodb74559_hosp_upsert_url = var('g_prodb74559_hosp_upsert_url');
 prodb74559_myracct_upsert_url = var('g_prodb74559_myracct_upsert_url');
 prodb74559_userprops_upsert_url = var('g_prodb74559_userprops_upsert_url');
 prodb74559_myracctuserprops_upsert_url = var('g_prodb74559_myracctuserprops_upsert_url');
@@ -154,33 +154,33 @@ if (!array or array.length() < 1) {
 
 
 // Make blank array for hospitals
-arrayhosp = [];
+// arrayhosp = [];
 // Loop over data and prepare array
-echo("Looping over original array from CSV and pulling hospital fields");
-for (subObject in array) {
-    array_push(arrayhosp, [
-        'SRL 病院コード': string_replace(to_string(subObject['SRL 病院コード']),"ZZEERROO","0"),
-        'SRL 病院名': string_replace(subObject['SRL 病院名'],"ZZEERROO","0"),
-        'SRL 担当メール': string_replace(subObject['SRL 担当メール'],"ZZEERROO","0"),
-        'Source': 'CSV',
-        'Job': jobstring
-    ])
-}
+// echo("Looping over original array from CSV and pulling hospital fields");
+// for (subObject in array) {
+//     array_push(arrayhosp, [
+//         'SRL 病院コード': string_replace(to_string(subObject['SRL 病院コード']),"ZZEERROO","0"),
+//         'SRL 病院名': string_replace(subObject['SRL 病院名'],"ZZEERROO","0"),
+//         'SRL 担当メール': string_replace(subObject['SRL 担当メール'],"ZZEERROO","0"),
+//         'Source': 'CSV',
+//         'Job': jobstring
+//     ])
+// }
 
 //string_replace(astring,"ZZEERROO","0")
 
-dump(arrayhosp);
-arrayhosp_json = json_encode(arrayhosp);
-echo(arrayhosp_json);
+// dump(arrayhosp);
+// arrayhosp_json = json_encode(arrayhosp);
+// echo(arrayhosp_json);
 // upsert to OES
-oes_hospupsert_response = request(
-  prodb74559_hosp_upsert_url,
-  arrayhosp_json,
-  'POST',
-  ['Content-Type: application/json',
-   'Authorization: bearer '+ prodb74559_token
-  ]
-)
+// oes_hospupsert_response = request(
+//   prodb74559_hosp_upsert_url,
+//   arrayhosp_json,
+//   'POST',
+//   ['Content-Type: application/json',
+//    'Authorization: bearer '+ prodb74559_token
+//   ]
+// )
 
 
 // Make blank array for myriad account
@@ -264,8 +264,6 @@ respond('<html lang="ja">
                     <p><button class="btn btn-success c-hand"><a href="{}" class="text-light">次のCSVアップロード</a></button></p>
                     <div class="divider text-center" data-content="RESULTS"></div>
                     <h2 class="text-gray">JSON形式のアップロードデータ</h2>
-                    <h3 class="text-dark">病院</h3>
-                    <pre class="code" data-lang="JSON"><code>{}</code></pre>
                     <h3 class="text-dark">ミリアドアカウント</h3>
                     <pre class="code" data-lang="JSON"><code>{}</code></pre>
                     <h3 class="text-dark">新規外部ユーザー</h3>
@@ -275,6 +273,6 @@ respond('<html lang="ja">
         </div>
   </body>
 </html>
-'.format(jobstring,url,arrayhosp_json,arraymyracct_json,arraynewextuser_json));
+'.format(jobstring,url,arraymyracct_json,arraynewextuser_json));
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
