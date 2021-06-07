@@ -210,7 +210,9 @@ oes_myracctupsert_response = request(
   'POST',
   ['Content-Type: application/json',
    'Authorization: bearer '+ prodb74559_token
-  ]
+  ],
+  false,
+  30
 )
 
 // Make blank array for myriad account
@@ -237,7 +239,9 @@ oes_newextuserupsert_response = request(
   'POST',
   ['Content-Type: application/json',
    'Authorization: bearer '+ prodb74559_token
-  ]
+  ],
+  false,
+  30
 )
 
 // Display the parsed CSV in JSON format 
