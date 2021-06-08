@@ -243,11 +243,10 @@ for (subObject in arraynewextuser) {
       'POST',
       ['Content-Type: application/json',
        'Authorization: bearer '+ prodb74559_token
-      ],
-      false,
-      30
+      ]
     )
 } 
+
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
@@ -285,3 +284,6 @@ respond('<html lang="ja">
 '.format(jobstring,url,arraymyracct_json,arraynewextuser_json));
 // Like a heredoc, chain the html with curly bracket placeholders to format()
 // The order of vars passed to format matters
+
+
+
