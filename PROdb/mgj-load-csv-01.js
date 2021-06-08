@@ -204,7 +204,7 @@ dump(arraymyracct);
 arraymyracct_json = json_encode(arraymyracct);
 echo(arraymyracct_json);
 // upsert to OES
-oes_myracctupsert_response = request(
+msodas_myracctupsert_response = request(
   prodb74559_myracct_upsert_url,
   arraymyracct_json,
   'POST',
@@ -232,22 +232,27 @@ for (subObject in array) {
 dump(arraynewextuser);
 arraynewextuser_json = json_encode(arraynewextuser);
 echo(arraynewextuser_json);
-// upsert to oes
-oes_newextuserupsert_response = request(
-  prodb74559_newextuser_upsert_url,
-  arraynewextuser_json,
-  'POST',
-  ['Content-Type: application/json',
-   'Authorization: bearer '+ prodb74559_token
-  ],
-  false,
-  30
-)
+// upsert to m-sodas
+echo("Loop over new user array and upsert each separately");
+for (subObject in arraynewextuser) {
+    subjson = "["+ json_encode(subObject) + "]";
+    echo(subjson);
+    msodas_newextuserupsert_response = request(
+      prodb74559_newextuser_upsert_url,
+      subjson,
+      'POST',
+      ['Content-Type: application/json',
+       'Authorization: bearer '+ prodb74559_token
+      ],
+      false,
+      30
+    )
+} 
 
 // Display the parsed CSV in JSON format 
 respond('<html lang="ja">
   <head>
-    <title>MGJ OESのCSVアップロード結果</title>
+    <title>MGJ M-SODASのCSVアップロード結果</title>
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
  </head>
   <body class="text-dark p-2">
