@@ -1,6 +1,10 @@
 // Convert furigana to romaji using url param kana
 // Furigana can be either katakana or hiragana and it is normalized to katakana in the script
 
+// Call from github 
+//result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/kana2romaji.js')
+//echo(result) 
+
 kana = var('request.query.kana');
 echo("Request url param kana...");
 echo(kana);
