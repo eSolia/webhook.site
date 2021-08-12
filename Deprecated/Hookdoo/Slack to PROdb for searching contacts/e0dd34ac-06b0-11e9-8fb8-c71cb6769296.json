@@ -1,0 +1,77 @@
+{
+  "hookName": "Slack to PROdb for searching contacts",
+  "environmentVariables": {
+    "SLACKTEXT": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "text"
+      }
+    },
+    "XSLACKREQUESTTIMESTAMP": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-request-timestamp"
+      }
+    },
+    "XSLACKSIGNATURE": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-signature"
+      }
+    },
+    "SLACKSIGNINGSECRET": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "2655452b28c80c1674ffd727272f1f3e"
+      }
+    },
+    "SLACKRESPONSEURL": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "response_url"
+      }
+    },
+    "DBFLEXRESTTOKEN": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "9BD56CD76F4B484386866BC78BE72D1F"
+      }
+    },
+    "SLACKPAYLOAD": {
+      "RAW_REQ_VAL": {
+        "SOURCE": "entirePayload"
+      }
+    },
+    "PLOADUSER": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "user_name"
+      }
+    }
+  },
+  "triggerRule": {
+    "==": {
+      "LEXPR": {
+        "REQ_VAL": {
+          "TYPE": "string",
+          "SOURCE": "singlePayloadValue",
+          "VALUEOF": "token"
+        }
+      },
+      "REXPR": {
+        "CONST": {
+          "TYPE": "string",
+          "VALUE": "0NJa7xQve0Do3XRmf2QDSogJ"
+        }
+      }
+    }
+  },
+  "isEnabled": true,
+  "scriptCode": "#!/bin/bash\n# Prepared by Rick Cogley 20181224\n# Run by hookdoo\n# For searching PROdb contacts from Slack, returning the found contact list to the channel\n# Some variables set within Hookdoo hook setup - SLACKPAYLOAD, SLACKTOKEN, DBFLEXRESTTOKEN, PLOADUSER, PLOADCHAN, PLOADTEXT etc \n\nJQBIN=\"/home/rcogley/bin/jq\"\nRMBIN=\"/usr/bin/rm\"\nAWKBIN=\"/usr/bin/awk\"\nPHPBIN=\"/usr/local/bin/php\"\nPERLBIN=\"/usr/bin/perl\"\nOPENSSLBIN=\"/usr/bin/openssl\"\nCMPBIN=\"/usr/bin/cmp\"\nCURLBIN=\"/usr/bin/curl\"\nWORKINGDIR=\"/home/rcogley/webapps/hook_slack_search_01\"\n# WORKINGDIR=\"$HOME\"\nNOWTS=$(TZ=\":Japan\" date -d \"today\" +\"%Y%m%d%H%M\")\nFILEPREFIX=\"eSolia-Contacts-${PLOADUSER}-\"\nBASESTRING=\"v0:${XSLACKREQUESTTIMESTAMP}:${SLACKPAYLOAD}\"\nHMACBASESTRING=$(echo -n ${BASESTRING} | ${OPENSSLBIN} sha256 -hmac ${SLACKSIGNINGSECRET} | ${AWKBIN} '{print $2}')\nLOCALSLACKSIGNATURE=\"v0=${HMACBASESTRING}\"\n# Bash parameter substitution\nCMDNAME=$(echo ${SLACKTEXT} | ${AWKBIN} -F' ' '{print $1}')\nCMDNAMESP=\"${CMDNAME} \"\nSEARCHSTR=${SLACKTEXT#\"$CMDNAMESP\"}\nSEARCHSTRENC=$(${PHPBIN} -r \"echo urlencode(\\\"$SEARCHSTR\\\");\")\n\n# Change to working directory\ncd ${WORKINGDIR}\n\n# Exit if local signature does not match sent signature\nif [ ${XSLACKSIGNATURE} != ${LOCALSLACKSIGNATURE} ]\n  then\n    echo \"ERROR! Local hmac signature does not match received one!\"\n    echo \"Received ${XSLACKSIGNATURE}\"\n    echo \"Expected ${LOCALSLACKSIGNATURE}\"\n    exit 1\nfi\n\n# Compare as lowercase with comma comma\nif [ ${CMDNAME,,} = \"contacts\" ]; then\n\n# Search a contact from PROdb\n    ${CURLBIN} \"GET\" \"https://pro.dbflex.net/secure/api/v2/15331/${DBFLEXRESTTOKEN}/Contact/API%20Search%20Contacts/select.json?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22${SEARCHSTRENC}%22)&top=20\" > ${WORKINGDIR}/${FILEPREFIX}searchresult1-${NOWTS}.json\n\nelse\n# Get all statuses in Channel from PROdb\n    exit 1\nfi\n\n# Filter the json for status\ncat ${WORKINGDIR}/${FILEPREFIX}searchresult1-${NOWTS}.json | ${JQBIN} --raw-output '.[] | .\"Display Name - Key Info 4\"' > ${WORKINGDIR}/${FILEPREFIX}intermediate2-${NOWTS}.out\n# Flatten actual cr to literal backslash n and put in variable\nSRESPTEXT=$(cat ${WORKINGDIR}/${FILEPREFIX}intermediate2-${NOWTS}.out | ${AWKBIN} -v ORS='\\\\n' '1')\n\n# ADD RESPONSE BACK\n\n# Use a function because you can use variables in it\n# Make sure heredoc token has NO SPACES after either one \n# and is the first thing on the line for the final one\n# This POSTS AS APP\ngen_curl_post_data() {\ncat <<CATTEXT\n{\n  \"text\": \"${SRESPTEXT}\",\n  \"mrkdwn_in\": [\n                \"text\"\n            ]\n}\nCATTEXT\n}\n${CURLBIN} -X \"POST\" \"${SLACKRESPONSEURL}\" \\\n     -H 'Content-Type: application/json' \\\n     --data \"$(gen_curl_post_data)\"\n\n# Cleanup\n\nrm -rf ${WORKINGDIR}/${FILEPREFIX}searchresult1-${NOWTS}.json\nrm -rf ${WORKINGDIR}/${FILEPREFIX}intermediate2-${NOWTS}.out\n",
+  "concurrencyStrategy": 0
+}

@@ -1,0 +1,30 @@
+{
+  "hookName": "PROdb eSolia Emergency SMS Alert",
+  "environmentVariables": {
+    "EMAILFROM": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "emailfrom"
+      }
+    },
+    "EMAILSUBJECT": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "emailsubject"
+      }
+    },
+    "SMSLIST": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "smslist"
+      }
+    }
+  },
+  "triggerRule": {},
+  "isEnabled": true,
+  "scriptCode": "#!/bin/bash\n# Prepared by Rick Cogley 20181222\n# Run by hookdoo\n# For bulk sending SMS via Twilio, when an emergency email comes in\n# Some variables set within Hookdoo hook setup - EMAILFROM, EMAILSUBJECT, SMSLIST\n\nJQBIN=\"/home/rcogley/bin/jq\"\nRMBIN=\"/usr/bin/rm\"\nAWKBIN=\"/usr/bin/awk\"\nPHPBIN=\"/usr/local/bin/php\"\nPERLBIN=\"/usr/bin/perl\"\nOPENSSLBIN=\"/usr/bin/openssl\"\nCMPBIN=\"/usr/bin/cmp\"\nCURLBIN=\"/usr/bin/curl\"\nWORKINGDIR=\"/home/rcogley/webapps/hook_mail2twilio01\"\n# WORKINGDIR=\"$HOME\"\nNOWTS=$(TZ=\":Japan\" date -d \"today\" +\"%Y%m%d%H%M\")\nFILEPREFIX=\"eSolia-SMS-\"\n\necho ${SMSLIST} > ${WORKINGDIR}/${FILEPREFIX}raw-${NOWTS}.out\n# $SMSMSG=\"Urgent Ticket $TICKNUM at $CLINAME\"\n# echo $TICKNUM > ~/eSolia-Ticket-Number.out\n# echo $CLINAME > ~/eSolia-Client-Name.out\ncat ${WORKINGDIR}/${FILEPREFIX}raw-${NOWTS}.out | awk '{gsub(/\\\\r\\\\n/,RS)}1' | sort -u > ${WORKINGDIR}/${FILEPREFIX}list-${NOWTS}.out\n\n# while IFS= read -r line; do\n#  echo \"TEST TEST Urgent Ticket\" \"$TICKNUM\" \"at\" \"$CLINAME\" \"$line\" >> ~/OIOIOI.txt\n# done < ~/eSolia-Ticket-SMS-List.out\n\n# Use double quotes in curl params to get env vars to work\nwhile IFS= read -r line; do\n${CURLBIN} \"https://api.twilio.com/2010-04-01/Accounts/AC7f9b58641a66d473654bac2e205ef1df/Messages.json\" -X POST \\\n--data-urlencode \"To=${line}\" \\\n--data-urlencode \"From=+12015033510\" \\\n--data-urlencode \"Body=Emergency Email received from ${EMAILFROM} with subject «${EMAILSUBJECT}» - pls see https://tinyurl.com/esolia99group\" \\\n-u AC7f9b58641a66d473654bac2e205ef1df:a43cc671aeff43cfcdea3793911d6eef\ndone < ${WORKINGDIR}/${FILEPREFIX}list-${NOWTS}.out\n\n",
+  "concurrencyStrategy": 0
+}

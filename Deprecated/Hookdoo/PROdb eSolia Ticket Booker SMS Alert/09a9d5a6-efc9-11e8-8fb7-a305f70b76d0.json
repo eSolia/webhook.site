@@ -1,0 +1,44 @@
+{
+  "hookName": "PROdb eSolia Ticket Booker SMS Alert",
+  "environmentVariables": {
+    "SMSLIST": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "smslist"
+      }
+    },
+    "TICKNUM": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "ticknum"
+      }
+    },
+    "CLINAME": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "cliname"
+      }
+    },
+    "SUBLINE": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "subline"
+      }
+    },
+    "EMAILFROM": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleQueryValue",
+        "VALUEOF": "emailfrom"
+      }
+    }
+  },
+  "triggerRule": {},
+  "isEnabled": true,
+  "scriptCode": "#!/bin/bash\n# Prepared by Rick Cogley 2018122\n# Run by hookdoo \n# For bulk sending SMS via Twilio, when a P1 ticket comes in\n# Some variables set within Hookdoo hook setup - TICKNUM, CLINAME, SMSLIST\n\nJQBIN=\"/home/rcogley/bin/jq\"\nRMBIN=\"/usr/bin/rm\"\nAWKBIN=\"/usr/bin/awk\"\nPHPBIN=\"/usr/local/bin/php\"\nPERLBIN=\"/usr/bin/perl\"\nOPENSSLBIN=\"/usr/bin/openssl\"\nCMPBIN=\"/usr/bin/cmp\"\nCURLBIN=\"/usr/bin/curl\"\nWORKINGDIR=\"/home/rcogley/webapps/hook_prodb_sms01\"\n# WORKINGDIR=\"$HOME\"\nNOWTS=$(TZ=\":Japan\" date -d \"today\" +\"%Y%m%d%H%M\")\nFILEPREFIX=\"eSolia-P1-SMS-\"\n\necho ${SMSLIST} > ${WORKINGDIR}/${FILEPREFIX}raw-${NOWTS}.out\n\ncat ${WORKINGDIR}/${FILEPREFIX}raw-${NOWTS}.out | awk '{gsub(/\\\\r\\\\n/,RS)}1' | sort -u > ${WORKINGDIR}/${FILEPREFIX}list-${NOWTS}.out\n\n\n# Send via Twilio\nwhile IFS= read -r line; do\n${CURLBIN} \"https://api.twilio.com/2010-04-01/Accounts/AC7f9b58641a66d473654bac2e205ef1df/Messages.json\" -X POST \\\n--data-urlencode \"To=${line}\" \\\n--data-urlencode \"From=+12015033510\" \\\n--data-urlencode \"Body=Urgent ${CLINAME} P1 Ticket #${TICKNUM} recd with subject «${SUBLINE}» from ${EMAILFROM} https://tinyurl.com/esotick\" \\\n-u AC7f9b58641a66d473654bac2e205ef1df:a43cc671aeff43cfcdea3793911d6eef\ndone < ${WORKINGDIR}/${FILEPREFIX}list-${NOWTS}.out\n\n",
+  "concurrencyStrategy": 0
+}

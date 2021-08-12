@@ -1,0 +1,75 @@
+{
+  "hookName": "Slack to Fax",
+  "environmentVariables": {
+    "SLACKPLOAD": {
+      "RAW_REQ_VAL": {
+        "SOURCE": "entirePayload"
+      }
+    },
+    "SLACKTEXT": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "text"
+      }
+    },
+    "WTURL": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "https://wt-fc00dade2a5d9a481fb0117f5735a03c-0.sandbox.auth0-extend.com/pdfme"
+      }
+    },
+    "SLACKUSER": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "user_name"
+      }
+    },
+    "SLACKCHANID": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "channel_id"
+      }
+    },
+    "SLACKCHANNAME": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "channel_name"
+      }
+    },
+    "XSLACKREQUESTTIMESTAMP": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-request-timestamp"
+      }
+    },
+    "XSLACKSIGNATURE": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-signature"
+      }
+    },
+    "SLACKSIGNINGSECRET": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "2655452b28c80c1674ffd727272f1f3e"
+      }
+    },
+    "SLACKRESPONSEURL": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "response_url"
+      }
+    }
+  },
+  "triggerRule": {},
+  "isEnabled": true,
+  "scriptCode": "#!/bin/sh\n\n# Run by hookdoo but script runs on attached server\n# Purpose is to get params from Slack and send a fax for testing\n\n# Prepared by Rick Cogley 20181226\n# Run by hookdoo\n# For sending Faxes via a Slack slash command, and Denphone outbound fax service\n# Some variables set within Hookdoo hook setup - SLACKPLOAD, SLACKTEXT etc\n# Payload: token=0NJa7xQve0Do3XRmf2QDSogJ&team_id=TEGCR0ESU&team_domain=esolia&channel_id=GEXQBH1HU&channel_name=acme&user_id=UEJGU184E&user_name=rickcogley&command=%2Ftestfax&text=0335933511+a+comment&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTEGCR0ESU%2F511189732294%2F2Ho9IXWxYuYRXsSfF5eT3ElD&trigger_id=510841322855.492433014912.9c244ac21d4fe25f33cf4ca19ee84059\n\nJQBIN=\"/home/rcogley/bin/jq\"\nRMBIN=\"/usr/bin/rm\"\nAWKBIN=\"/usr/bin/awk\"\nPHPBIN=\"/usr/local/bin/php\"\nPERLBIN=\"/usr/bin/perl\"\nOPENSSLBIN=\"/usr/bin/openssl\"\nCMPBIN=\"/usr/bin/cmp\"\nCURLBIN=\"/usr/bin/curl\"\nMAILBIN=\"/usr/bin/mailx\"\nWORKINGDIR=\"/home/rcogley/webapps/hook_slack_fax_01\"\n# WORKINGDIR=\"$HOME\"\nNOWTS=$(TZ=\":Japan\" date -d \"today\" +\"%Y%m%d%H%M\")\nNOWTSHUMAN=$(TZ=\":Japan\" date)\nFILEPREFIX=\"eSolia-Slack2Fax-\"\nFAXNUM=$(echo ${SLACKTEXT} | ${AWKBIN} -F' ' '{print $1}')\nFAXNUMSP=\"${FAXNUM} \"\nCOMMENTSTR=${SLACKTEXT#\"$FAXNUMSP\"}\nFAXFROM=\"03-4577-3309\"\n# Obfuscate channel name with xxd\nCHANXXD=$(echo ${SLACKCHANNAME} | xxd -ps -c 200 | tr -d '\\n')\n# Obfuscate channel name with simple atbash cipher\nCHANATBASH=$(echo ${SLACKCHANNAME} | tr abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba)\n# echo \"thestring\" | xxd -ps -r\nEMAILFROM=\"eSolia Fax<fax@esolia.net>\"\nBASESTRING=\"v0:${XSLACKREQUESTTIMESTAMP}:${SLACKPLOAD}\"\nHMACBASESTRING=$(echo -n ${BASESTRING} | ${OPENSSLBIN} sha256 -hmac ${SLACKSIGNINGSECRET} | ${AWKBIN} '{print $2}')\nLOCALSLACKSIGNATURE=\"v0=${HMACBASESTRING}\"\n\n# Exit if local signature does not match sent signature\nif [ ${XSLACKSIGNATURE} != ${LOCALSLACKSIGNATURE} ]\n  then\n    echo \"ERROR! Local hmac signature does not match received one!\"\n    echo \"Received ${XSLACKSIGNATURE}\"\n    echo \"Expected ${LOCALSLACKSIGNATURE}\"\n    exit 1\nfi\n\ncd ${WORKINGDIR}\n\n# echo ${SLACKPLOAD} > ${WORKINGDIR}/${FILEPREFIX}payload-${NOWTS}.out\n# cat ${WORKINGDIR}/${FILEPREFIX}payload-${NOWTS}.out | ${PHPBIN} -R 'echo urldecode($argn).\"\\n\";' > ${WORKINGDIR}/${FILEPREFIX}payload-decoded-${NOWTS}.out\n\n# GET PDF where G switch makes the data fields become url params\n${CURLBIN} -o ${WORKINGDIR}/${FILEPREFIX}${SLACKCHANNAME}-${SLACKUSER}-Test-PDF-${NOWTS}.pdf \"${WTURL}\" -G \\\n--data \"user=${SLACKUSER}\" \\\n--data-urlencode \"date=${NOWTSHUMAN}\" \\\n--data \"channelid=${SLACKCHANID}\" \\\n--data \"number=${FAXNUM}\" \\\n--data \"from=${FAXFROM}\" \\\n--data \"channel=${CHANATBASH}\" \\\n--data-urlencode \"comment=${COMMENTSTR}\" \n\n# FAX it via Denphone fax blast\necho \"\" | ${MAILBIN} -s \"${FAXNUM}\" -S \"from=${EMAILFROM}\" -a ${WORKINGDIR}/${FILEPREFIX}${SLACKCHANNAME}-${SLACKUSER}-Test-PDF-${NOWTS}.pdf faxprocess@denphone.com\n\n# ADD RESPONSE BACK\n\n# Use a function because you can use variables in it\n# Make sure heredoc token has NO SPACES after either one \n# and is the first thing on the line for the final one\n# This POSTS AS APP\n\ngen_curl_post_data() {\ncat <<CATTEXT\n{\n  \"text\": \"Attempting to fax ${FAXNUM} triggered by ${SLACKUSER} :robot_face:\"\n}\nCATTEXT\n}\n\n${CURLBIN} -X \"POST\" \"${SLACKRESPONSEURL}\" \\\n     -H 'Content-Type: application/json' \\\n     --data \"$(gen_curl_post_data)\"\n\n# Cleanup\n\n# no need, the PDF is tiny\n# rm -rf ${WORKINGDIR}/${FILEPREFIX}Test-PDF.pdf\n# rm -rf ${WORKINGDIR}/${FILEPREFIX}Test-PDF-${NOWTS}.pdf",
+  "concurrencyStrategy": 0
+}

@@ -1,0 +1,102 @@
+{
+  "hookName": "Slack to PROdb for status and checkin",
+  "environmentVariables": {
+    "SLACKPAYLOAD": {
+      "RAW_REQ_VAL": {
+        "SOURCE": "entirePayload"
+      }
+    },
+    "DBFLEXRESTTOKEN": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "9BD56CD76F4B484386866BC78BE72D1F"
+      }
+    },
+    "PLOADUSER": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "user_name"
+      }
+    },
+    "SLACKTOKEN": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "xoxp-492433014912-494572042150-500432296919-61aea739ed6efecf4689b6b6d30a872f"
+      }
+    },
+    "PLOADCHAN": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "channel_id"
+      }
+    },
+    "PLOADTEXT": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "text"
+      }
+    },
+    "PLOADTOKEN": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "token"
+      }
+    },
+    "XSLACKREQUESTTIMESTAMP": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-request-timestamp"
+      }
+    },
+    "XSLACKSIGNATURE": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singleHeaderValue",
+        "VALUEOF": "x-slack-signature"
+      }
+    },
+    "SLACKSIGNINGSECRET": {
+      "CONST": {
+        "TYPE": "string",
+        "VALUE": "2655452b28c80c1674ffd727272f1f3e"
+      }
+    },
+    "PLOADBODY": {
+      "RAW_REQ_VAL": {
+        "SOURCE": "entirePayload"
+      }
+    },
+    "PLOADRESPONSEURL": {
+      "REQ_VAL": {
+        "TYPE": "string",
+        "SOURCE": "singlePayloadValue",
+        "VALUEOF": "response_url"
+      }
+    }
+  },
+  "triggerRule": {
+    "==": {
+      "LEXPR": {
+        "REQ_VAL": {
+          "TYPE": "string",
+          "SOURCE": "singlePayloadValue",
+          "VALUEOF": "token"
+        }
+      },
+      "REXPR": {
+        "CONST": {
+          "TYPE": "string",
+          "VALUE": "0NJa7xQve0Do3XRmf2QDSogJ"
+        }
+      }
+    }
+  },
+  "isEnabled": true,
+  "scriptCode": "#!/bin/bash\n# Prepared by Rick Cogley 20181224\n# Run by hookdoo\n# For posting eSolia checkin from Slack to PROdb, and returning status to the same channel that was used\n# Some variables set within Hookdoo hook setup - SLACKPAYLOAD, SLACKTOKEN, DBFLEXRESTTOKEN, PLOADUSER, PLOADCHAN, PLOADTEXT etc \n\n# Key point - Think of multiple people doing this simultaneously.  \n# Payload like: token=0NJa7xQve0Do3XRmf2QDSogJ&team_id=TEGCR0ESU&team_domain=esolia&channel_id=CEH50BNTC&channel_name=cook&user_id=UEJGU184E&user_name=rickcogley&command=%2Fset&text=status%3A+testing&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTEGCR0ESU%2F498801480769%2F6g41N0Ewa7Dt5Fj6qNFBcPlW&trigger_id=500805928502.492433014912.39f5221083202990149a932ba6b3f769\n\nJQBIN=\"/home/rcogley/bin/jq\"\nRMBIN=\"/usr/bin/rm\"\nAWKBIN=\"/usr/bin/awk\"\nPHPBIN=\"/usr/local/bin/php\"\nPERLBIN=\"/usr/bin/perl\"\nOPENSSLBIN=\"/usr/bin/openssl\"\nCMPBIN=\"/usr/bin/cmp\"\nCURLBIN=\"/usr/bin/curl\"\nWORKINGDIR=\"/home/rcogley/webapps/hook_slack_01\"\n# WORKINGDIR=\"$HOME\"\nNOWTS=$(TZ=\":Japan\" date -d \"today\" +\"%Y%m%d%H%M\")\nFILEPREFIX=\"eSolia-Status-${PLOADUSER}-\"\nBASESTRING=\"v0:${XSLACKREQUESTTIMESTAMP}:${SLACKPAYLOAD}\"\nHMACBASESTRING=$(echo -n ${BASESTRING} | ${OPENSSLBIN} sha256 -hmac ${SLACKSIGNINGSECRET} | ${AWKBIN} '{print $2}')\nLOCALSLACKSIGNATURE=\"v0=${HMACBASESTRING}\"\n\n# Signature Debug\n# echo ${BASESTRING} > ${WORKINGDIR}/signed.txt\n# echo ${SLACKSIGNINGSECRET} >> ${WORKINGDIR}/signed.txt\n# echo -n ${BASESTRING} | ${OPENSSLBIN} sha256 -hmac ${SLACKSIGNINGSECRET} | ${AWKBIN} '{print $2}' >> ${WORKINGDIR}/signed.txt\n# echo ${HMACBASESTRING} >> ${WORKINGDIR}/signed.txt\n# echo ${LOCALSLACKSIGNATURE} >> ${WORKINGDIR}/signed.txt\n# echo ${XSLACKSIGNATURE} >> ${WORKINGDIR}/signed.txt\n\n# Change to working directory\ncd ${WORKINGDIR}\n# source ${WORKINGDIR}/variables.local\n\n# Exit if local signature does not match sent signature\nif [ ${XSLACKSIGNATURE} != ${LOCALSLACKSIGNATURE} ]\n  then\n    echo \"ERROR! Local hmac signature does not match received one!\"\n    echo \"Received ${XSLACKSIGNATURE}\"\n    echo \"Expected ${LOCALSLACKSIGNATURE}\"\n    exit 1\nfi\n\n# capture payload to file with timestamp\necho ${SLACKPAYLOAD} > ${WORKINGDIR}/${FILEPREFIX}${NOWTS}.out\n# Parse url params to intermediate json\ncat ${WORKINGDIR}/${FILEPREFIX}${NOWTS}.out | ${PHPBIN} -R 'parse_str($argn, $parsed); echo json_encode($parsed).\"\\n\";' > ${WORKINGDIR}/${FILEPREFIX}intermediate-${NOWTS}.json\n# Prep intermediate json for PROdb load\ncat ${WORKINGDIR}/${FILEPREFIX}intermediate-${NOWTS}.json | ${JQBIN} '. | [.] | map(. + {\"Slack Timestamp\":(now|todateiso8601)}) | map(. + {\"Slack Token\": .token} | del(.token)) | map(. + {\"Slack API App ID\": .api_app_id} | del(.api_app_id)) | map(. + {\"Slack Is Enterprise Install\": .is_enterprise_install} | del(.is_enterprise_install)) |map(. + {\"Slack Channel Id\": .channel_id} | del(.channel_id)) | map(. + {\"Slack Channel Name\": .channel_name} | del(.channel_name)) | map(. + {\"Slack Service Id\": .service_id} | del(.service_id)) | map(. + {\"Slack Team Domain\": .team_domain} | del(.team_domain)) | map(. + {\"Slack Team Id\": .team_id} | del(.team_id)) | map(. + {\"Slack Text\": .text} | del(.text)) | map(. + {\"Slack Command\": .command} | del(.command)) | map(. + {\"Slack Trigger Id\": .trigger_id} | del(.trigger_id)) | map(. + {\"Slack Response URL\": .response_url} | del(.response_url)) | map(. + {\"Slack User Id\": .user_id} | del(.user_id)) | map(. + {\"Slack User Name\": .user_name} | del(.user_name))' > ${WORKINGDIR}/${FILEPREFIX}dbload-${NOWTS}.json\n# Send to PROdb Status table\n${CURLBIN} -X \"POST\" \"https://pro.dbflex.net/secure/api/v2/15331/${DBFLEXRESTTOKEN}/Status/create.json\" \\\n     -H 'Content-Type: application/json; charset=utf-8' \\\n     -d @${WORKINGDIR}/${FILEPREFIX}dbload-${NOWTS}.json\n\n# Clean up intermediates but leave load json\n${RMBIN} -rf ${WORKINGDIR}/${FILEPREFIX}${NOWTS}.out\n${RMBIN} -rf ${WORKINGDIR}/${FILEPREFIX}intermediate-${NOWTS}.json\n\n# ADD RESPONSE BACK\n\n# Use a function because you can use variables in it\n# Make sure heredoc token has NO SPACES after either one \n# and is the first thing on the line for the final one\n# This POSTS AS APP\n\ngen_curl_post_data() {\ncat <<CATTEXT\n{\n  \"text\": \"*${PLOADUSER}* is ${PLOADTEXT} <!here> :rocket:\",\n  \"mrkdwn_in\": [\n                \"text\"\n            ]\n}\nCATTEXT\n}\n\n# DOING FROM PRODB INSTEAD\n# ${CURLBIN} -X \"POST\" \"${PLOADRESPONSEURL}\" \\\n#     -H 'Content-Type: application/json' \\\n#     --data \"$(gen_curl_post_data)\"\n\n# Create and send as user but sends as Rick due to token apparently...\n# curl -X \"POST\" \"https://slack.com/api/chat.postMessage\" --data-urlencode \"token=${SLACKTOKEN}\" --data-urlencode \"channel=${PLOADCHAN}\" --data-urlencode \"text=${PLOADTEXT} @here :rocket:\" --data-urlencode \"as_user=${PLOADUSER}\" --data-urlencode \"link_names=true\" --data-urlencode \"unfurl_links=true\" --data-urlencode \"pretty=1\"\n\n# Set user status VIA PRODB?\n\n# Use a function because you can use variables in it\n# Make sure heredoc token has NO SPACES after either one \n# and is the first thing on the line for the final one\n# gen_curl_status_data() {\n# cat <<CATSTAT\n# {\n#     \"profile\": {\n#         \"status_text\": \"${PLOADTEXT}\",\n#         \"status_emoji\": \":mega:\",\n#         \"status_expiration\": 0\n#     }\n# }\n# CATSTAT\n# }\n\n# curl -X \"POST\" \"https://slack.com/api/users.profile.set\"  \\\n#      -H 'Content-Type: application/json; charset=utf-8' \\\n#      -H 'Authorization: Bearer xoxp_secret_token' \\\n#      --data \"$(gen_curl_status_data)\"\n",
+  "concurrencyStrategy": 4
+}
