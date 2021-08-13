@@ -1,12 +1,12 @@
 // Process Slack eSolia app /iam slash command
 
 // Call from github 
-//result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/kana2romaji.js')
+//result = import('https://raw.githubusercontent.com/RickCogley/webhook.site/master/PROdb/esolia-slack-iam-01.js')
 //echo(result) 
 
 // Configuration
 prodb_token = var('g_prodb_token');
-slack_token = var('g_slack_token_001');
+//slack_token = var('g_slack_token_001');
 slack_signsecret = var('g_slack_signsecret_001');
 prodb_status_create_url = var('g_prodb_status_create_url');
 
@@ -15,20 +15,20 @@ echo("SLACK PAYLOAD FORM and HEADER PARAMS");
 slack_payload = var('request.content');
 echo("slack_payload: " + slack_payload);
 
-sp_user_name = var('request.form.user_name');
-echo("sp_user_name: " + sp_user_name);
+//sp_user_name = var('request.form.user_name');
+//echo("sp_user_name: " + sp_user_name);
 
-sp_channel_id = var('request.form.channel_id');
-echo("sp_channel_id: " + sp_channel_id);
+//sp_channel_id = var('request.form.channel_id');
+//echo("sp_channel_id: " + sp_channel_id);
 
-sp_text = var('request.form.text');
-echo("sp_text: " + sp_text);
+//sp_text = var('request.form.text');
+//echo("sp_text: " + sp_text);
 
-sp_token = var('request.form.token');
-echo("sp_token: " + sp_token);
+//sp_token = var('request.form.token');
+//echo("sp_token: " + sp_token);
 
-sp_response_url = var('request.form.response_url');
-echo("sp_response_url: " + sp_response_url);
+//sp_response_url = var('request.form.response_url');
+//echo("sp_response_url: " + sp_response_url);
 
 x_slack_request_timestamp = var('request.header.x-slack-request-timestamp');
 echo("x_slack_request_timestamp: " + to_string(x_slack_request_timestamp));
