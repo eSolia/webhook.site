@@ -32,43 +32,19 @@ echo("client_name: " + client_name);
 sms_list_array = string_split(trim(sms_list),"\n");
 dump(sms_list_array);
 
-// ===========ALL===========
-
+// ===========CHECK TYPE===========
 if (var('request.query.type') == "all") {
-	echo("START Processing for general sms emergency send to all")
-	
-body_text = "Emergency Email received from " + email_from + " with subject «" + email_subject + "» - pls see https://tinyurl.com/esolia99group"
-echo("body_text: " + body_text);
-
-for (sms_target in sms_list_array) {
-	echo(sms_target);
-	body = query([
-	  'From': '+12015033510',
-	  'Body': body_text,
-	  'To': trim(sms_target),
-	])
-	
-	resp = request(
-	twilio_send_sms_url,
-	body,
-	'POST',
-	[
-		'Content-Type: application/x-www-form-urlencoded',
-		'Authorization: Basic ' + twilio_token_enc
-	]
-)
+	echo("SET type as all for processing general sms emergency send")
+	body_text = "Emergency Email received from " + email_from + " with subject «" + email_subject + "» - pls see https://tinyurl.com/esolia99group"
+	echo("body_text: " + body_text);
 }
-	echo("END Processing for general sms emergency send to all")
-}
-
-// ===========BOOKERS===========
-
 if (var('request.query.type') == "bookers") {
-	echo("START Processing for sms emergency send to bookers")
-	
-body_text = "Urgent " + client_name + " P1 Ticket " + to_string(ticket_number) + " recd with subject «" + email_subject + "» from " + email_from + " https://tinyurl.com/esotick"
-echo("body_text: " + body_text);
+	echo("SET type as bookers for processing specific sms send to bookers")
+	body_text = "Urgent " + client_name + " P1 Ticket " + to_string(ticket_number) + " recd with subject «" + email_subject + "» from " + email_from + " https://tinyurl.com/esotick"
+	echo("body_text: " + body_text);
+}
 
+// ============SEND VIA TWILIO============
 for (sms_target in sms_list_array) {
 	echo(sms_target);
 	body = query([
@@ -86,6 +62,4 @@ for (sms_target in sms_list_array) {
 		'Authorization: Basic ' + twilio_token_enc
 	]
 )
-}
-	echo("END Processing for sms emergency send to bookers")
 }
