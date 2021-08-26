@@ -173,3 +173,80 @@ echo(slack_callback_data);
   }
 // END prodb if
 }
+
+// PROCESS if testfax command
+if (var('request.form.command') == "/testfax") {
+    echo("START Processing for testfax command")
+
+// Make blank array then array_push request form params
+// TS format needed by PROdb: iso8601
+// Append .date_format('YYYY-MM-DDThh:mmZ') to force a format, but simple now works in our case
+prodb_fax_array = [];
+array_push(prodb_fax_array, [
+  'Slack Timestamp': to_date('now'),
+  'Slack Token': var('request.form.token'),
+  'Slack API App ID': var('request.form.api_app_id'),
+  'Slack Is Enterprise Install': var('request.form.is_enterprise_install'),
+  'Slack Channel Id': var('request.form.channel_id'),
+  'Slack Channel Name': var('request.form.channel_name'),
+  'Slack Service Id': var('request.form.service_id'),
+  'Slack Team Domain': var('request.form.team_domain'),
+  'Slack Team Id': var('request.form.team_id'),
+  'Slack Text': var('request.form.text'),
+  'Slack Command': var('request.form.command'),
+  'Slack Trigger Id': var('request.form.trigger_id'),
+  'Slack Response URL': var('request.form.response_url'),
+  'Slack User Id': var('request.form.user_id'),
+  'Slack User Name': var('request.form.user_name')
+])
+
+// Prep URL
+prodb_contact_search_url_w_param = prodb_contact_search_url + "?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22" + contact_query_enc + "%22)&top=20"
+echo("prodb_contact_search_url_w_param: " + prodb_contact_search_url_w_param);
+// ?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22${SEARCHSTRENC}%22)&top=20
+
+
+echo("TRANSFORM ARRAY TO JSON AND PUSH TO PRODB");
+// echo json to be sent to prodb status table
+prodb_fax_array_json = json_encode(prodb_fax_array);
+echo(prodb_fax_array_json);
+
+// get contact(s) from prodb
+prodb_fax_response = request(
+  prodb_contact_search_url_w_param,
+  '',
+  'GET',
+  ['Content-Type: application/json',
+   'Authorization: bearer '+ prodb_token
+  ]
+)
+
+prodb_contact_response_content = prodb_contact_response['content'];
+echo(prodb_contact_response_content);
+prodb_contact_response_content_array = json_decode(prodb_contact_response_content);
+prodb_contacts = "";
+for (subObject in prodb_contact_response_content_array) {
+   echo(subObject['Display Name - Key Info 4']); 
+   prodb_contacts = prodb_contacts + subObject['Display Name - Key Info 4'] + "\n"
+   echo(prodb_contacts);
+}
+
+slack_callback_data = '{
+  "text": "' + prodb_contacts + '",
+  "mrkdwn_in": ["text"]
+}'
+echo(slack_callback_data);
+
+// This goes back to slack
+  if (prodb_contact_response['status'] = 200) {
+    echo("END Processing for prodb command");
+    request(
+      slack_response_url,
+      slack_callback_data,
+      'POST',
+      ['Content-Type: application/json']
+    )
+    respond('/prodb Successfully Searched Contact', 200);
+  }
+// END faxtest if
+}
