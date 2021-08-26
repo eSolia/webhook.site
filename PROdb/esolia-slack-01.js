@@ -183,22 +183,24 @@ if (var('request.form.command') == "/testfax") {
 // Append .date_format('YYYY-MM-DDThh:mmZ') to force a format, but simple now works in our case
 prodb_fax_array = [];
 array_push(prodb_fax_array, [
-  'Slack Timestamp': to_date('now'),
-  'Slack Token': var('request.form.token'),
-  'Slack API App ID': var('request.form.api_app_id'),
-  'Slack Is Enterprise Install': var('request.form.is_enterprise_install'),
-  'Slack Channel Id': var('request.form.channel_id'),
-  'Slack Channel Name': var('request.form.channel_name'),
-  'Slack Service Id': var('request.form.service_id'),
-  'Slack Team Domain': var('request.form.team_domain'),
-  'Slack Team Id': var('request.form.team_id'),
+  'Sent TS': to_date('now'),
+  'Type': true,
   'Slack Text': var('request.form.text'),
-  'Slack Command': var('request.form.command'),
-  'Slack Trigger Id': var('request.form.trigger_id'),
-  'Slack Response URL': var('request.form.response_url'),
-  'Slack User Id': var('request.form.user_id'),
-  'Slack User Name': var('request.form.user_name')
+  'Slack User': var('request.form.user_name')+" "+var('request.form.user_id'),
+  'Slack Channel': var('request.form.channel_id')+var('request.form.channel_name')
 ])
+
+//'Slack Token': var('request.form.token'),
+//'Slack API App ID': var('request.form.api_app_id'),
+//'Slack Is Enterprise Install': var('request.form.is_enterprise_install'),
+//'Slack Channel Name': var('request.form.channel_name'),
+//'Slack Service Id': var('request.form.service_id'),
+//'Slack Team Domain': var('request.form.team_domain'),
+//'Slack Team Id': var('request.form.team_id'),
+//'Slack Command': var('request.form.command'),
+//'Slack Trigger Id': var('request.form.trigger_id'),
+//'Slack Response URL': var('request.form.response_url'),
+//'Slack User Id': var('request.form.user_id')
 
 // Prep URL
 prodb_contact_search_url_w_param = prodb_contact_search_url + "?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22" + contact_query_enc + "%22)&top=20"
