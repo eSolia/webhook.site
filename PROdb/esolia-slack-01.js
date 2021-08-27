@@ -10,6 +10,7 @@ prodb_token = var('g_prodb_token');
 slack_signsecret = var('g_slack_signsecret_001');
 prodb_status_create_url = var('g_prodb_status_create_url');
 prodb_contact_search_url = var('g_prodb_contact_search_url');
+prodb15331_fax_upsert_url = var('g_prodb15331_fax_upsert_url');
 
 echo("SLACK PAYLOAD and HEADER PARAMS for HMAC CHECK and FORM VARS");
 
@@ -202,53 +203,25 @@ array_push(prodb_fax_array, [
 //'Slack Response URL': var('request.form.response_url'),
 //'Slack User Id': var('request.form.user_id')
 
-// Prep URL
-prodb_contact_search_url_w_param = prodb_contact_search_url + "?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22" + contact_query_enc + "%22)&top=20"
-echo("prodb_contact_search_url_w_param: " + prodb_contact_search_url_w_param);
-// ?filter=Contains(%5BDisplay%20Name%20-%20Key%20Info%204%5D%2C%22${SEARCHSTRENC}%22)&top=20
-
-
 echo("TRANSFORM ARRAY TO JSON AND PUSH TO PRODB");
 // echo json to be sent to prodb status table
 prodb_fax_array_json = json_encode(prodb_fax_array);
 echo(prodb_fax_array_json);
 
-// get contact(s) from prodb
+// POST fax to prodb
 prodb_fax_response = request(
-  prodb_contact_search_url_w_param,
-  '',
-  'GET',
+  prodb15331_fax_upsert_url,
+  prodb_fax_array_json,
+  'POST',
   ['Content-Type: application/json',
    'Authorization: bearer '+ prodb_token
   ]
 )
 
-prodb_contact_response_content = prodb_contact_response['content'];
-echo(prodb_contact_response_content);
-prodb_contact_response_content_array = json_decode(prodb_contact_response_content);
-prodb_contacts = "";
-for (subObject in prodb_contact_response_content_array) {
-   echo(subObject['Display Name - Key Info 4']); 
-   prodb_contacts = prodb_contacts + subObject['Display Name - Key Info 4'] + "\n"
-   echo(prodb_contacts);
-}
-
-slack_callback_data = '{
-  "text": "' + prodb_contacts + '",
-  "mrkdwn_in": ["text"]
-}'
-echo(slack_callback_data);
-
 // This goes back to slack
-  if (prodb_contact_response['status'] = 200) {
-    echo("END Processing for prodb command");
-    request(
-      slack_response_url,
-      slack_callback_data,
-      'POST',
-      ['Content-Type: application/json']
-    )
-    respond('/prodb Successfully Searched Contact', 200);
+  if (prodb_fax_response['status'] = 200) {
+    echo("END Processing for testfax command");
+    respond('/testfax Successfully Uploaded Fax to PROdb PS FAX Table', 200);
   }
 // END faxtest if
 }
