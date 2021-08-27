@@ -221,7 +221,7 @@ prodb_fax_response = request(
 // This goes back to slack
   if (prodb_fax_response['status'] = 200) {
     echo("END Processing for testfax command");
-    respond('/testfax Successfully Uploaded Fax to PROdb PS FAX Table', 200);
+    respond('/testfax Successfully loaded to PROdb PS FAX Table. Should send in 5 or 10 min.', 200);
   }
 // END faxtest if
 }
