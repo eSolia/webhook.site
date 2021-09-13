@@ -10,6 +10,32 @@ echo("Request url param hash (binhex of md5 in prodb): " + hash_str);
 epoch = string_replace(string_replace(string_replace(subst_epoch,"E","0"),"A","5"),"T","1");
 echo("Orig epoch: " + epoch);
 echo("md5 of orig epoch: " + hash(epoch, "md5"));
+echo("epoch md5: " + epoch.hash('md5'));
+echo("test client md5: " + "FCSJ".hash('md5'))
+
+
+// Function for error handling
+function error (message) {
+	echo('Error: {}'.format(message))
+	respond(json_encode(['error': message]), 500)
+}
+
+acme_token = string_upper("ACME".hash('md5'));
+fcsj_token = string_upper("FCSJ".hash('md5'));
+validtokens = ['ACME':acme_token, 'FCSJ':fcsj_token];
+tokenisvalid = array_contains(validtokens,hash_str)
+echo(tokenisvalid);
+
+// If the token was invalid
+if (!tokenisvalid) {
+  error('Invalid token')
+}
+
+if (hash_str == fcsj_token) {
+	echo("oh baby");
+}
+
+
 
 //1631491200
 //echo(base64_encode(epoch));
@@ -24,7 +50,6 @@ echo("md5 of orig epoch: " + hash(epoch, "md5"));
 
 //echo('1631404800'.hash('md5'));
 //echo("constant md5 hash: " + '1631491200'.hash('md5'));
-echo("epoch md5: " + epoch.hash('md5'));
 //echo("base64 of epoch md5: " + base64_encode(epoch.hash('md5')));
 //echo("base64 of hash md5: " + bin2hex(hash_str.hash('md5')));
 
