@@ -9,11 +9,6 @@ echo("Request url param hmac (binhex of md5 in prodb with client code as key): "
 //Replace(Replace(Replace([Expires Epoch Time],"1","T"),"5","A"),"0","E") 
 epoch = string_replace(string_replace(string_replace(subst_epoch,"E","0"),"A","5"),"T","1");
 echo("Orig epoch: " + epoch);
-// 3 not needed?
-echo("md5 of orig epoch: " + hash(epoch, "md5"));
-echo("epoch md5: " + epoch.hash('md5'));
-echo("test client md5: " + "FCSJ".hash('md5'))
-
 
 echo("local test of hmac: " + string_upper(hmac(epoch, "md5", "FCSJ")));
 //hmac(string value, string algo, string secret) : string/false¶
