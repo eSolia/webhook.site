@@ -1,5 +1,9 @@
 // Return CSV
 
+// Configuration
+prodb_token = var('g_prodb15331_token_for_csv');
+prodb_fcsj_tasks_csv_url = var('g_prodb_fcsj_select_tasks_csv_url');
+
 subst_epoch = var('request.query.e');
 echo("Request url param subst epoch: " + subst_epoch);
 hmac_str = var('request.query.h');
@@ -41,19 +45,25 @@ if (!urlisvalid) {
 }
 
 
-if ( hmac_str == fcsj_token) {
+if (hmac_str == fcsj_token) {
 	echo("oh baby");
+	// Get csv 
+	echo("GET csv");
+	prodb_response = request(
+	  prodb_fcsj_tasks_csv_url,
+	  '',
+	  'GET',
+	  ['Content-Type: application/json',
+	   'Authorization: bearer ' + prodb_token
+	  ]
+	)
+	// prep csv
+	response_csv = prodb_response['content'];
+	echo(response_csv);
+
 }
 
+//respond(string content, int status, array headers)
+//To present the CSV better, you'd need to download the data (e.g. using request() or Send Request action) and re-send it to the user, but with a Content-Disposition header, for example:
 
-// Get reference loads qty for comparison after load
-//echo("GET reference loads qty");
-//prodb_response1 = request(
-//  prodb55438_reference_loads_url,
-//  '',
-//  'GET',
-//  ['Content-Type: application/json',
-//   'Authorization: bearer ' + prodb55438_token
-//  ]
-//)
-
+//Content-Disposition: attachment; filename="Report.csv"
