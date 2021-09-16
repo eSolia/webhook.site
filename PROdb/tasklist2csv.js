@@ -9,13 +9,10 @@ echo("Request url param subst epoch: " + subst_epoch);
 hmac_str = var('request.query.h');
 echo("Request url param hmac (binhex of md5 in prodb with client code as key): " + hmac_str);
 
-//string_replace(string subject, string search, string replace)
-//Replace(Replace(Replace([Expires Epoch Time],"1","T"),"5","A"),"0","E") 
+// string_replace(string subject, string search, string replace)
+// In PROdb: Replace(Replace(Replace([Expires Epoch Time],"1","T"),"5","A"),"0","E") 
 epoch = string_replace(string_replace(string_replace(subst_epoch,"E","0"),"A","5"),"T","1");
 echo("Orig epoch: " + epoch);
-
-echo("local test of hmac: " + string_upper(hmac(epoch, "md5", "FCSJ")));
-//hmac(string value, string algo, string secret) : string/false¶
 
 // Function for error handling
 function error (message) {
@@ -23,6 +20,8 @@ function error (message) {
 	respond(json_encode(['error': message]), 500)
 }
 
+// Check hmac
+// hmac(string value, string algo, string secret) : string/false
 acme_token = string_upper("ACME".hash('md5'));
 fcsj_token = string_upper(hmac(epoch, "md5", "FCSJ"));
 validtokens = ['ACME':acme_token, 'FCSJ':fcsj_token];
