@@ -2,17 +2,21 @@
 
 subst_epoch = var('request.query.e');
 echo("Request url param subst epoch: " + subst_epoch);
-hash_str = var('request.query.h');
-echo("Request url param hash (binhex of md5 in prodb): " + hash_str);
+hmac_str = var('request.query.h');
+echo("Request url param hmac (binhex of md5 in prodb with client code as key): " + hmac_str);
 
 //string_replace(string subject, string search, string replace)
 //Replace(Replace(Replace([Expires Epoch Time],"1","T"),"5","A"),"0","E") 
 epoch = string_replace(string_replace(string_replace(subst_epoch,"E","0"),"A","5"),"T","1");
 echo("Orig epoch: " + epoch);
+// 3 not needed?
 echo("md5 of orig epoch: " + hash(epoch, "md5"));
 echo("epoch md5: " + epoch.hash('md5'));
 echo("test client md5: " + "FCSJ".hash('md5'))
 
+
+echo("local test of hmac: " + string_upper(hmac(epoch, "md5", "FCSJ")));
+//hmac(string value, string algo, string secret) : string/false¶
 
 // Function for error handling
 function error (message) {
@@ -21,9 +25,9 @@ function error (message) {
 }
 
 acme_token = string_upper("ACME".hash('md5'));
-fcsj_token = string_upper("FCSJ".hash('md5'));
+fcsj_token = string_upper(hmac(epoch, "md5", "FCSJ"));
 validtokens = ['ACME':acme_token, 'FCSJ':fcsj_token];
-tokenisvalid = array_contains(validtokens,hash_str)
+tokenisvalid = array_contains(validtokens,hmac_str);
 echo(tokenisvalid);
 
 // If the token was invalid
@@ -42,7 +46,7 @@ if (!urlisvalid) {
 }
 
 
-if (hash_str == fcsj_token) {
+if ( hmac_str == fcsj_token) {
 	echo("oh baby");
 }
 
