@@ -57,24 +57,15 @@ if (hmac_str == fcsj_token) {
 	   'Authorization: bearer ' + prodb_token
 	  ]
 	)
-	// prep csv
+	// BUILD RESPONSE
+	// prep csv to var
 	response_csv = prodb_response['content'];
-	//echo(response_csv);
-	headers = ["Content-Disposition: attachment; filename=Report22.csv"];
-	//respond(ret_content, 200, headers);
+	// prep DL file timestamp
+	csvdate = 'now'.date_format('YYYY-MM-DD-HHmm', null, 'GMT+9', true)
+	// prep header string
+	header_prep = "Content-Disposition: attachment; filename=" + "eSolia_FCSJ-Tasks-" + csvdate + ".csv"
+	// create header array from var
+	headers = [header_prep];
+	dump(headers);
 	respond(response_csv, 200, headers);
 }
-
-//respond(string content, int status, array headers)
-//To present the CSV better, you'd need to download the data (e.g. using request() or Send Request action) and re-send it to the user, but with a Content-Disposition header, for example:
-
-//Content-Disposition: attachment; filename="Report.csv"
-
-//headers = ["Content-Disposition: attachment; filename=Report.csv"];
-// respond with the page's json
-// 選ばれたページを返す
-
-
-
-
-
