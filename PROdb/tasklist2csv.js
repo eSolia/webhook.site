@@ -46,7 +46,7 @@ if (!urlisvalid) {
 
 
 if (hmac_str == fcsj_token) {
-	echo("oh baby");
+	echo("hmac matches");
 	// Get csv 
 	echo("GET csv");
 	prodb_response = request(
@@ -59,11 +59,22 @@ if (hmac_str == fcsj_token) {
 	)
 	// prep csv
 	response_csv = prodb_response['content'];
-	echo(response_csv);
-
+	//echo(response_csv);
+	headers = ["Content-Disposition: attachment; filename=Report22.csv"];
+	//respond(ret_content, 200, headers);
+	respond(response_csv, 200, headers);
 }
 
 //respond(string content, int status, array headers)
 //To present the CSV better, you'd need to download the data (e.g. using request() or Send Request action) and re-send it to the user, but with a Content-Disposition header, for example:
 
 //Content-Disposition: attachment; filename="Report.csv"
+
+//headers = ["Content-Disposition: attachment; filename=Report.csv"];
+// respond with the page's json
+// 選ばれたページを返す
+
+
+
+
+
