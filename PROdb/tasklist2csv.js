@@ -23,7 +23,7 @@ function error (message) {
 // Check hmac
 // hmac(string value, string algo, string secret) : string/false
 acme_token = string_upper("ACME".hash('md5'));
-fcsj_token = string_upper(hmac(epoch, "md5", "FCSJ"));
+fcsj_token = string_upper(hmac(epoch, "md5", "FCSJ34"));
 validtokens = ['ACME':acme_token, 'FCSJ':fcsj_token];
 tokenisvalid = array_contains(validtokens,hmac_str);
 echo(tokenisvalid);
