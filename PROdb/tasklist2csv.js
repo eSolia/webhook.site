@@ -3,6 +3,7 @@
 // Configuration
 prodb_token = var('g_prodb15331_token_for_csv');
 prodb_fcsj_tasks_csv_url = var('g_prodb_fcsj_select_tasks_csv_url');
+task2csv_hmac_secret_fcsj = var('g_task2csv_hmac_secret_fcsj');
 
 subst_epoch = var('request.query.e');
 echo("Request url param subst epoch: " + subst_epoch);
@@ -16,14 +17,14 @@ echo("Orig epoch: " + epoch);
 
 // Function for error handling
 function error (message) {
-	echo('Error: {}'.format(message))
+	echo('« eSolia Inc. » ERROR: {}'.format(message))
 	respond(json_encode(['error': message]), 500)
 }
 
 // Check hmac
 // hmac(string value, string algo, string secret) : string/false
 acme_token = string_upper("ACME".hash('md5'));
-fcsj_token = string_upper(hmac(epoch, "md5", "FCSJ34"));
+fcsj_token = string_upper(hmac(epoch, "md5", task2csv_hmac_secret_fcsj));
 validtokens = ['ACME':acme_token, 'FCSJ':fcsj_token];
 tokenisvalid = array_contains(validtokens,hmac_str);
 echo(tokenisvalid);
