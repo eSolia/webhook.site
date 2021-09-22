@@ -17,8 +17,8 @@ echo("Orig epoch: " + epoch);
 
 // Function for error handling
 function error (message) {
-	echo('« eSolia Inc. » ERROR: {}'.format(message))
-	respond(json_encode(['error': message]), 500)
+	echo('ERROR: {}'.format(message))
+	respond(json_encode(['== eSolia Inc. == ERROR:': message]), 500)
 }
 
 // Check hmac
